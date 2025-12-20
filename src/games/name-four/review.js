@@ -42,6 +42,10 @@ export function reviewNameFour(container) {
           </p>
         </div>
       </div>
+
+      <div class="mobile-back-bar">
+        <button class="mobile-back-btn" onclick="showHome()">← Back</button>
+      </div>
     `;
     return;
   }
@@ -68,6 +72,10 @@ export function reviewNameFour(container) {
           <strong>${saved.guessCount ?? saved.found.length}</strong>
         </div>
       </div>
+    </div>
+
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
     </div>
   `;
 }

@@ -235,6 +235,10 @@ export function reviewTodayAnswers(container) {
         <h2>No Results Yet</h2>
         <p style="text-align: center; color: #666;">Play today's This or That game first!</p>
       </div>
+
+      <div class="mobile-back-bar">
+        <button class="mobile-back-btn" onclick="showHome()">← Back</button>
+      </div>
     `;
     return;
   }
@@ -256,6 +260,10 @@ export function reviewTodayAnswers(container) {
             Continue Game
           </button>
         ` : ''}
+      </div>
+
+      <div class="mobile-back-bar">
+        <button class="mobile-back-btn" onclick="showHome()">← Back</button>
       </div>
     `;
     return;
@@ -281,6 +289,10 @@ export function reviewTodayAnswers(container) {
           </div>
         `).join('')}
       </div>
+    </div>
+
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
     </div>
   `;
 

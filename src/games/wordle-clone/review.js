@@ -49,5 +49,9 @@ export function reviewTodayWordle(container) {
         Answer: <strong>${data.answer}</strong>
       </div>
     </div>
+
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
+    </div>
   `;
 }
