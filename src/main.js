@@ -22,7 +22,7 @@ function showHome() {
   app.innerHTML = `
     <div class="home-screen">
       <header class="app-header">
-        <h1>Daily Games ❤️</h1>
+        <h1>The Andrew Times Games</h1>
 
         <div class="progress-summary">
           <div class="level-info">
