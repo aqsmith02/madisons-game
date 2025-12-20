@@ -4,6 +4,7 @@ import './style.css';
 import { startThisOrThat, reviewTodayAnswers } from './games/this-or-that/index.js';
 import { startWordle } from './games/wordle-clone/index.js';
 import { reviewTodayWordle } from './games/wordle-clone/review.js';
+import { startNameFour } from './games/name-four/index.js';
 import { progression } from './utils/progression.js';
 
 const app = document.getElementById('app');
@@ -74,11 +75,17 @@ function showHome() {
         </div>
 
         <!-- NAME FOUR -->
-        <div class="game-card locked">
-          <div class="game-icon">🔗</div>
+        <div class="game-card ${progression.hasPlayedToday('name-four') ? 'completed' : ''}"
+             onclick="handleGameClick('name-four')">
+          <div class="game-icon">🔢</div>
           <h3>Name Four</h3>
-          <p>Coming soon...</p>
-          <div class="game-xp">Up to 100 XP</div>
+          <p>Find the four that belong together</p>
+          <div class="game-xp">75 XP</div>
+
+          ${progression.hasPlayedToday('name-four')
+            ? '<div class="completed-badge">✓ Completed Today</div>'
+            : '<div class="play-badge">Play Now</div>'
+          }
         </div>
 
       </div>
@@ -94,6 +101,13 @@ function showHome() {
    GAME ROUTING
 ========================= */
 function handleGameClick(gameName) {
+  // Name Four has NO review screen
+  if (gameName === 'name-four') {
+    if (progression.hasPlayedToday('name-four')) return;
+    playGame('name-four');
+    return;
+  }
+
   if (progression.hasPlayedToday(gameName)) {
     reviewGame(gameName);
   } else {
@@ -111,6 +125,10 @@ function playGame(gameName) {
 
   if (gameName === 'wordle') {
     startWordle(container);
+  }
+
+  if (gameName === 'name-four') {
+    startNameFour(container);
   }
 }
 
