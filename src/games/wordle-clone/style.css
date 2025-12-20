@@ -11,16 +11,59 @@
   gap: 24px;
 }
 
+/* =========================
+   BACK BUTTON (ABSOLUTE RESET)
+========================= */
+
+.wordle-back {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* TOTAL RESET — removes ALL inherited behavior */
+.wordle-back .back-btn {
+  all: unset;
+
+  /* Rebuild button styles */
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5f8f7a;
+  cursor: pointer;
+
+  padding: 8px 16px;
+  border-radius: 8px;
+
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.wordle-back .back-btn:hover {
+  background: rgba(95, 143, 122, 0.1);
+}
+
+/* =========================
+   WORDLE CONTENT
+========================= */
+
 .wordle {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
 }
+
+/* =========================
+   GRID (WHITE CARD)
+========================= */
 
 .grid {
   display: grid;
   gap: 6px;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .row {
@@ -37,6 +80,7 @@
   width: 56px;
   height: 56px;
   border: 2px solid #d3d6da;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,13 +110,17 @@
 }
 
 /* =========================
-   KEYBOARD
+   KEYBOARD (WHITE CARD)
 ========================= */
 
 .keyboard {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .key-row {
@@ -82,12 +130,17 @@
 }
 
 .key {
-  padding: 12px;
+  padding: 12px 14px;
   border: none;
-  background: #d3d6da;
+  background: #e5e7eb;
   font-weight: bold;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.key:hover {
+  background: #d1d5db;
 }
 
 /* =========================
@@ -95,11 +148,11 @@
 ========================= */
 
 .wordle-message {
-  margin-top: 16px;
+  margin-top: 12px;
   padding: 12px 16px;
-  background: #121213;
+  background: #111827;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: bold;
   text-align: center;
 }
@@ -116,14 +169,12 @@
   width: fit-content;
 }
 
-/* 🔑 THIS FIXES THE VERTICAL STACKING */
 .review-row {
   display: flex;
   gap: 6px;
   justify-content: center;
 }
 
-/* Slightly smaller tiles for review */
 .review-row .tile {
   width: 44px;
   height: 44px;
