@@ -234,10 +234,22 @@
 .review-screen {
   padding: 20px;
   animation: fadeIn 0.3s;
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
 }
 
 .review-screen h2 {
   text-align: center;
+  margin-bottom: 10px;
+}
+
+.review-score {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #4a90e2;
   margin-bottom: 30px;
 }
 

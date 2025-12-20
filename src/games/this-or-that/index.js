@@ -132,7 +132,7 @@ export class ThisOrThatGame {
           Total XP: ${progression.getTotalXP()} 
           <span class="level-badge">Level ${progression.getCurrentLevel()}</span>
         </div>
-        <button class="review-btn" onclick="thisOrThat.showReview()">
+        <button class="review-btn" onclick="reviewThisOrThat()">
           Review Answers
         </button>
         <button class="home-btn" onclick="showHome()">
@@ -213,3 +213,63 @@ window.thisOrThat = null;
 export function startThisOrThat(container) {
   window.thisOrThat = new ThisOrThatGame(container);
 }
+
+// Function to review today's answers from anywhere
+export function reviewTodayAnswers(container) {
+  const today = new Date().toDateString();
+  const saved = localStorage.getItem('thisOrThat_progress');
+  
+  if (!saved) {
+    container.innerHTML = `
+      <div class="review-screen">
+        <button class="back-btn" onclick="showHome()">← Back</button>
+        <h2>No Results Yet</h2>
+        <p style="text-align: center; color: #666;">Play today's This or That game first!</p>
+      </div>
+    `;
+    return;
+  }
+
+  const data = JSON.parse(saved);
+  if (data.date !== today || !data.complete) {
+    container.innerHTML = `
+      <div class="review-screen">
+        <button class="back-btn" onclick="showHome()">← Back</button>
+        <h2>No Results Yet</h2>
+        <p style="text-align: center; color: #666;">Complete today's This or That game first!</p>
+      </div>
+    `;
+    return;
+  }
+
+  const content = `
+    <div class="review-screen">
+      <button class="back-btn" onclick="showHome()">← Back</button>
+      <h2>Today's Answer Review</h2>
+      <div class="review-score">Score: ${data.score} / 100 XP</div>
+      <div class="review-list">
+        ${data.answers.map((a, i) => `
+          <div class="review-item ${a.correct ? 'correct' : 'incorrect'}">
+            <div class="review-number">Question ${i + 1}</div>
+            <div class="review-question">
+              <span class="choice ${a.userChoice === 'A' ? 'selected' : ''}">${a.question.optionA}</span>
+              <span class="vs">or</span>
+              <span class="choice ${a.userChoice === 'B' ? 'selected' : ''}">${a.question.optionB}</span>
+            </div>
+            <div class="review-result">
+              ${a.correct ? '✓ Correct!' : `✗ I chose: ${a.question.answer === 'A' ? a.question.optionA : a.question.optionB}`}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = content;
+}
+
+// Global function to trigger review
+window.reviewThisOrThat = function() {
+  const container = document.getElementById('app');
+  reviewTodayAnswers(container);
+};

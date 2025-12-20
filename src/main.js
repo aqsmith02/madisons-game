@@ -1,7 +1,7 @@
 // src/main.js
 
 import './style.css';
-import { startThisOrThat } from './games/this-or-that/index.js';
+import { startThisOrThat, reviewTodayAnswers } from './games/this-or-that/index.js';
 import { progression } from './utils/progression.js';
 
 const app = document.getElementById('app');
@@ -38,13 +38,13 @@ function showHome() {
 
       <div class="game-cards">
         <div class="game-card ${progression.hasPlayedToday('thisOrThat') ? 'completed' : ''}" 
-             onclick="playGame('thisOrThat')">
+             onclick="${progression.hasPlayedToday('thisOrThat') ? 'reviewGame(\'thisOrThat\')' : 'playGame(\'thisOrThat\')'}">
           <div class="game-icon">🤔</div>
           <h3>This or That</h3>
           <p>Guess what I would choose</p>
           <div class="game-xp">Up to 100 XP</div>
           ${progression.hasPlayedToday('thisOrThat') ? 
-            '<div class="completed-badge">✓ Completed</div>' : 
+            '<div class="completed-badge">✓ Completed - Click to Review</div>' : 
             '<div class="play-badge">Play Now</div>'
           }
         </div>
@@ -73,7 +73,7 @@ function showHome() {
 
 function playGame(gameName) {
   if (progression.hasPlayedToday(gameName)) {
-    return; // Already played today
+    return;
   }
 
   app.innerHTML = '<div id="game-container"></div>';
@@ -81,6 +81,15 @@ function playGame(gameName) {
 
   if (gameName === 'thisOrThat') {
     startThisOrThat(container);
+  }
+}
+
+function reviewGame(gameName) {
+  app.innerHTML = '<div id="game-container"></div>';
+  const container = document.getElementById('game-container');
+
+  if (gameName === 'thisOrThat') {
+    reviewTodayAnswers(container);
   }
 }
 
@@ -139,6 +148,7 @@ function showRewards() {
 // Make functions globally accessible
 window.showHome = showHome;
 window.playGame = playGame;
+window.reviewGame = reviewGame;
 window.showRewards = showRewards;
 
 // Start the app
