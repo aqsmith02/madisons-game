@@ -11,8 +11,9 @@ export class ThisOrThatGame {
     this.currentQuestionIndex = 0;
     this.score = 0;
     this.answers = [];
-    this.isComplete = this.loadProgress();
+    this.isComplete = false;
     
+    this.loadProgress();
     this.render();
   }
 
@@ -22,22 +23,26 @@ export class ThisOrThatGame {
     
     if (saved) {
       const data = JSON.parse(saved);
-      if (data.date === today && data.complete) {
-        this.score = data.score;
-        this.answers = data.answers;
+      if (data.date === today) {
+        // Restore progress from today
+        this.score = data.score || 0;
+        this.answers = data.answers || [];
+        this.currentQuestionIndex = this.answers.length;
+        this.isComplete = data.complete || false;
         return true;
       }
     }
     return false;
   }
 
-  saveProgress() {
+  saveProgress(complete = false) {
     const today = new Date().toDateString();
     localStorage.setItem('thisOrThat_progress', JSON.stringify({
       date: today,
-      complete: this.isComplete,
+      complete: complete || this.isComplete,
       score: this.score,
-      answers: this.answers
+      answers: this.answers,
+      currentQuestionIndex: this.currentQuestionIndex
     }));
   }
 
@@ -54,6 +59,9 @@ export class ThisOrThatGame {
     if (correct) {
       this.score += 20;
     }
+
+    // Save progress after each answer
+    this.saveProgress(false);
 
     // Show result briefly
     this.showResult(correct, question);
@@ -89,7 +97,7 @@ export class ThisOrThatGame {
 
   completeGame() {
     this.isComplete = true;
-    this.saveProgress();
+    this.saveProgress(true);
     
     // Add XP to progression system
     const result = progression.addXP(this.score);
@@ -181,6 +189,7 @@ export class ThisOrThatGame {
     this.container.innerHTML = `
       <div class="this-or-that-game">
         <div class="game-header">
+          <button class="back-btn" onclick="showHome()">← Back</button>
           <h2>This or That</h2>
           <div class="progress-indicator">
             Question ${this.currentQuestionIndex + 1} / ${this.questions.length}
@@ -232,11 +241,21 @@ export function reviewTodayAnswers(container) {
 
   const data = JSON.parse(saved);
   if (data.date !== today || !data.complete) {
+    const answeredCount = data.answers?.length || 0;
     container.innerHTML = `
       <div class="review-screen">
         <button class="back-btn" onclick="showHome()">← Back</button>
-        <h2>No Results Yet</h2>
-        <p style="text-align: center; color: #666;">Complete today's This or That game first!</p>
+        <h2>${answeredCount > 0 ? 'In Progress' : 'No Results Yet'}</h2>
+        <p style="text-align: center; color: #666;">
+          ${answeredCount > 0 
+            ? `You've answered ${answeredCount} of 5 questions. Complete the game to review all answers!` 
+            : 'Complete today\'s This or That game first!'}
+        </p>
+        ${answeredCount > 0 ? `
+          <button class="continue-btn" onclick="startThisOrThatFromMenu()">
+            Continue Game
+          </button>
+        ` : ''}
       </div>
     `;
     return;
@@ -272,4 +291,10 @@ export function reviewTodayAnswers(container) {
 window.reviewThisOrThat = function() {
   const container = document.getElementById('app');
   reviewTodayAnswers(container);
+};
+
+// Helper function to start game from menu
+window.startThisOrThatFromMenu = function() {
+  const container = document.getElementById('app');
+  startThisOrThat(container);
 };

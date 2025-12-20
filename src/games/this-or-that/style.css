@@ -9,6 +9,28 @@
 .game-header {
   text-align: center;
   margin-bottom: 40px;
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+  font-weight: 500;
+}
+
+.back-btn:hover {
+  border-color: #4a90e2;
+  color: #4a90e2;
+  background: #f0f7ff;
 }
 
 .game-header h2 {
@@ -20,6 +42,12 @@
 .progress-indicator {
   font-size: 0.9rem;
   color: #666;
+}
+
+.score-display {
+  color: #4a90e2;
+  font-weight: 600;
+  margin-left: 8px;
 }
 
 .question-prompt {
@@ -199,7 +227,8 @@
 }
 
 .review-btn,
-.home-btn {
+.home-btn,
+.continue-btn {
   padding: 15px 40px;
   font-size: 1.1rem;
   border: none;
@@ -210,12 +239,14 @@
   margin: 10px;
 }
 
-.review-btn {
+.review-btn,
+.continue-btn {
   background: #4a90e2;
   color: white;
 }
 
-.review-btn:hover {
+.review-btn:hover,
+.continue-btn:hover {
   background: #357abd;
   transform: translateY(-2px);
 }
@@ -238,6 +269,14 @@
   margin: 0 auto;
   background: white;
   border-radius: 16px;
+  position: relative;
+  padding-top: 60px;
+}
+
+.review-screen .back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 .review-screen h2 {
