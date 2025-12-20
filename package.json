@@ -1,5 +1,5 @@
 {
-  "name": "madisons-game",
+  "name": "the-andrew-times-games",
   "version": "1.0.0",
   "description": "A collection of mini games with progression for Madison.",
   "main": "vite.config.js",
@@ -11,16 +11,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aqsmith02/madisons-game.git"
+    "url": "git+https://github.com/aqsmith02/the-andrew-times-games.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/aqsmith02/madisons-game/issues"
+    "url": "https://github.com/aqsmith02/the-andrew-times-games/issues"
   },
-  "homepage": "https://github.com/aqsmith02/madisons-game#readme",
+  "homepage": "https://github.com/aqsmith02/the-andrew-times-games#readme",
   "devDependencies": {
     "gh-pages": "^6.3.0",
     "vite": "^7.3.0"
