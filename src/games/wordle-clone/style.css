@@ -12,37 +12,6 @@
 }
 
 /* =========================
-   BACK BUTTON (ABSOLUTE RESET)
-========================= */
-
-.wordle-back {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-}
-
-/* TOTAL RESET — removes ALL inherited behavior */
-.wordle-back .back-btn {
-  all: unset;
-
-  /* Rebuild button styles */
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #5f8f7a;
-  cursor: pointer;
-
-  padding: 8px 16px;
-  border-radius: 8px;
-
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.wordle-back .back-btn:hover {
-  background: rgba(95, 143, 122, 0.1);
-}
-
-/* =========================
    WORDLE CONTENT
 ========================= */
 
