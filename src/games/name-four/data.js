@@ -6,15 +6,15 @@ export const NAME_FOUR_PUZZLES = [
     answers: ['beanie', 'boobie', 'munt', 'tony']
   },
   {
-    category: 'Favorite 80s Rock',
+    category: 'Favorite 80s Rock Bands',
     answers: ['the smiths', 'talking heads', 'misfits', 'queen']
   },
   {
     category: 'In Your Room',
-    answers: ['box fan', 'john lennon', 'vision board', 'wallpaper']
+    answers: ['box fan', 'john lennon poster', 'vision board', 'wallpaper']
   },
   {
-    category: 'Eating Combos',
+    category: 'Food Combos',
     answers: [
       'ketchup and rice',
       'orange juice and popcorn',
@@ -25,9 +25,9 @@ export const NAME_FOUR_PUZZLES = [
   {
     category: 'Road Names',
     answers: [
-      'pickle buddy ct',
-      'honey girl ln',
-      'ruby golightly dr',
+      'pickle buddy court',
+      'honey girl lane',
+      'ruby golightly drive',
       'apple butter drive'
     ]
   },
@@ -45,7 +45,7 @@ export const NAME_FOUR_PUZZLES = [
     answers: [
       'timothee chalamet',
       'harrison ford',
-      'dylan o brien',
+      'dylan o\'brien',
       'jim carrey'
     ]
   },

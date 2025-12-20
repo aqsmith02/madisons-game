@@ -3,7 +3,7 @@
 export const QUESTIONS = [
   { id: 1, optionA: "Methodical", optionB: "Rowan", answer: "B" },
   { id: 2, optionA: "Clash Royale", optionB: "Overwatch", answer: "B" },
-  { id: 3, optionA: "Pocket 8s", optionB: "Ace 9 Suited", answer: "A" },
+  { id: 3, optionA: "Pocket 8s", optionB: "Ace 9 Suited", answer: "B" },
   { id: 4, optionA: "Apple Bold Rock", optionB: "Mimosa Bold Rock", answer: "A" },
   { id: 5, optionA: "Dr Pepper", optionB: "Coke", answer: "B" },
   { id: 6, optionA: "Krusty", optionB: "Ned", answer: "B" },
@@ -26,7 +26,7 @@ export const QUESTIONS = [
   { id: 23, optionA: "Spring", optionB: "Summer", answer: "A" },
   { id: 24, optionA: "Big Black Puffer", optionB: "Fake Leather", answer: "A" },
   { id: 25, optionA: "Whole Number", optionB: "Decimal Numbers", answer: "B" },
-  { id: 26, optionA: "Butt Rash", optionB: "Cuts", answer: "B" },
+  { id: 26, optionA: "Butt Rash", optionB: "Butt Cuts", answer: "B" },
   { id: 27, optionA: "Queen", optionB: "Michael Jackson", answer: "B" },
   { id: 28, optionA: "Peak Scythe", optionB: "Peak Poker", answer: "A" },
   { id: 29, optionA: "Bench Press", optionB: "Deadlift", answer: "A" },
