@@ -8,7 +8,7 @@ import {
   saveNameFourProgress
 } from './storage.js';
 
-const XP_REWARD = 75;
+const XP_REWARD = 100;
 
 /* =========================
    DAILY ROTATION
