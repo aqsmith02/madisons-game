@@ -4,13 +4,22 @@ import './style.css';
 import { renderWordleGrid } from './render.js';
 import { progression } from '../../utils/progression.js';
 import { saveWordleProgress } from './storage.js';
+import {
+  loadWordLists,
+  getDailyAnswer,
+  isValidGuess
+} from './words.js';
 
 const WORD_LENGTH = 5;
 const MAX_ROWS = 6;
 const WIN_XP = 100;
-const ANSWER = 'MADLY'; // TODO: rotate daily later
 
-export function startWordle(container) {
+export async function startWordle(container) {
+  // 🔑 ENSURE WORD LISTS ARE LOADED
+  await loadWordLists();
+
+  const ANSWER = getDailyAnswer();
+
   let currentRow = 0;
   let currentCol = 0;
   let gameOver = false;
@@ -67,11 +76,17 @@ export function startWordle(container) {
   }
 
   /* =========================
-     GAME LOGIC (ATOMIC)
+     GAME LOGIC
   ========================= */
   function submitGuess() {
     const tiles = rows[currentRow].children;
     const guess = Array.from(tiles).map(t => t.textContent).join('');
+
+    if (!isValidGuess(guess)) {
+      showMessage('❌ Not in word list');
+      return;
+    }
+
     const answerLetters = ANSWER.split('');
     const result = Array(WORD_LENGTH).fill('absent');
 
@@ -98,10 +113,8 @@ export function startWordle(container) {
       }
     }
 
-    // ✅ STORE FULLY-COLORED GUESS
     guesses.push({ word: guess, result });
 
-    // WIN
     if (guess === ANSWER) {
       endGame(true);
       return;
@@ -110,7 +123,6 @@ export function startWordle(container) {
     currentRow++;
     currentCol = 0;
 
-    // LOSS
     if (currentRow === MAX_ROWS) {
       endGame(false);
     }
@@ -118,7 +130,6 @@ export function startWordle(container) {
 
   function endGame(won) {
     gameOver = true;
-
     progression.markPlayedToday('wordle');
 
     if (won) {

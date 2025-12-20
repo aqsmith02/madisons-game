@@ -101,15 +101,16 @@ function showHome() {
 /* =========================
    GAME ROUTING
 ========================= */
-function handleGameClick(gameName) {
+async function handleGameClick(gameName) {
   if (progression.hasPlayedToday(gameName)) {
     reviewGame(gameName);
   } else {
-    playGame(gameName);
+    await playGame(gameName); // 🔑 FIX
   }
 }
 
-function playGame(gameName) {
+
+async function playGame(gameName) {
   app.innerHTML = '<div id="game-container"></div>';
   const container = document.getElementById('game-container');
 
@@ -118,13 +119,14 @@ function playGame(gameName) {
   }
 
   if (gameName === 'wordle') {
-    startWordle(container);
+    await startWordle(container); // 🔑 FIX
   }
 
   if (gameName === 'name-four') {
     startNameFour(container);
   }
 }
+
 
 function reviewGame(gameName) {
   app.innerHTML = '<div id="game-container"></div>';
