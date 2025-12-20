@@ -150,6 +150,7 @@ export class ProgressionSystem {
     this.save();
   }
 
+
   getTotalXP() {
     return this.totalXP;
   }

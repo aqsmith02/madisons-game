@@ -3,6 +3,8 @@
 import './style.css';
 import { startThisOrThat, reviewTodayAnswers } from './games/this-or-that/index.js';
 import { progression } from './utils/progression.js';
+import { startWordle } from './games/wordle-clone/index.js';
+
 
 const app = document.getElementById('app');
 
@@ -49,10 +51,11 @@ function showHome() {
           }
         </div>
 
-        <div class="game-card locked">
+        <div class="game-card ${progression.hasPlayedToday('wordle') ? 'completed' : ''}"
+     onclick="playGame('wordle')">
           <div class="game-icon">📝</div>
           <h3>Wordle</h3>
-          <p>Coming soon...</p>
+          <p>Guess the secret word</p>
           <div class="game-xp">Up to 100 XP</div>
         </div>
 
@@ -82,7 +85,12 @@ function playGame(gameName) {
   if (gameName === 'thisOrThat') {
     startThisOrThat(container);
   }
+
+  if (gameName === 'wordle') {
+    startWordle(container);
+  }
 }
+
 
 function reviewGame(gameName) {
   app.innerHTML = '<div id="game-container"></div>';
