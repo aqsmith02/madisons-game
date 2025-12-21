@@ -50,6 +50,7 @@ export function startNameFour(container) {
   let guessCount = saved?.date === today ? saved.guessCount || 0 : 0;
   let xpAwarded = saved?.date === today ? saved.xpAwarded || 0 : 0;
   let completed = saved?.date === today && saved.completed;
+  let levelUpRewards = []; // Track level-ups during game
 
   container.innerHTML = `
     <div class="name-four">
@@ -115,7 +116,13 @@ export function startNameFour(container) {
 
     if (answers.includes(guess)) {
       found.add(guess);
-      awardXP();
+      const result = awardXP();
+      
+      // Store level-up rewards
+      if (result.leveledUp && result.newRewards.length > 0) {
+        levelUpRewards.push(...result.newRewards);
+      }
+      
       renderGrid();
 
       if (found.size + revealed.size === 4) {
@@ -174,7 +181,8 @@ export function startNameFour(container) {
   ========================= */
   function awardXP() {
     xpAwarded += XP_PER_ANSWER;
-    progression.addXP(XP_PER_ANSWER);
+    const result = progression.addXP(XP_PER_ANSWER);
+    return result;
   }
 
   function persist(done = false) {
@@ -200,13 +208,33 @@ export function startNameFour(container) {
   }
 
   function showCompletionMessage() {
-    completionMessage.innerHTML = `
+    let content = `
       <div class="completion">
         🎉 Puzzle complete
         <div class="xp">+${xpAwarded} XP</div>
         <p>Total guesses: <strong>${guessCount}</strong></p>
+    `;
+
+    // Show level-up rewards if any
+    if (levelUpRewards.length > 0) {
+      content += `
+        <div class="level-up-section">
+          <div class="level-up-title">🎉 LEVEL UP! 🎉</div>
+          ${levelUpRewards.map(reward => `
+            <div class="level-up-reward">
+              <strong>${reward.title}</strong>
+              <div class="level-up-desc">${reward.description}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    content += `
         <p>Come back tomorrow for a new category</p>
       </div>
     `;
+
+    completionMessage.innerHTML = content;
   }
 }

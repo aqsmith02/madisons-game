@@ -12,6 +12,7 @@ export class ThisOrThatGame {
     this.score = 0;
     this.answers = [];
     this.isComplete = false;
+    this.levelUpRewards = []; // Track level-ups during game
     
     this.loadProgress();
     this.render();
@@ -58,8 +59,13 @@ export class ThisOrThatGame {
     
     if (correct) {
       this.score += 20;
-      // Award XP immediately after each correct answer
-      progression.addXP(20);
+      // Award XP immediately after each correct answer and check for level-up
+      const result = progression.addXP(20);
+      
+      // Store level-up rewards
+      if (result.leveledUp && result.newRewards.length > 0) {
+        this.levelUpRewards.push(...result.newRewards);
+      }
     }
 
     // Save progress after each answer
@@ -125,6 +131,21 @@ export class ThisOrThatGame {
           You got ${this.answers.filter(a => a.correct).length} out of ${this.questions.length} correct!
         </div>
     `;
+
+    // Show level-up rewards if any
+    if (this.levelUpRewards.length > 0) {
+      content += `
+        <div class="level-up">
+          <div class="level-up-banner">🎉 LEVEL UP! 🎉</div>
+          ${this.levelUpRewards.map(reward => `
+            <div class="new-reward">
+              <strong>${reward.title}</strong>
+              <div>${reward.description}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
 
     content += `
         <div class="total-progress">

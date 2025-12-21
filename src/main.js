@@ -87,7 +87,7 @@ function showHome() {
           </div>
           <h3>Name Four</h3>
           <p>Find the four that belong together</p>
-          <div class="game-xp">100 XP</div>
+          <div class="game-xp">Up to 100 XP</div>
 
           ${progression.hasPlayedToday('name-four')
             ? '<div class="completed-badge">✓ Completed — Click to Review</div>'

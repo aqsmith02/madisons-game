@@ -196,15 +196,17 @@ export async function startWordle(container) {
     if (won) {
       const result = progression.addXP(WIN_XP);
       let message = `🎉 You got it! +${WIN_XP} XP`;
+      let isLevelUp = false;
       
       if (result.leveledUp && result.newRewards.length > 0) {
+        isLevelUp = true;
         message += `\n\n🎉 LEVEL UP! 🎉\n`;
         result.newRewards.forEach(reward => {
-          message += `\nUnlocked: ${reward.title}`;
+          message += `\n✨ Unlocked: ${reward.title}\n${reward.description}`;
         });
       }
       
-      showMessage(message);
+      showMessage(message, isLevelUp);
     } else {
       showMessage(`😢 The word was ${ANSWER}`);
     }
@@ -219,12 +221,17 @@ export async function startWordle(container) {
     });
   }
 
-  function showMessage(text) {
+  function showMessage(text, isLevelUp = false) {
     const existing = root.querySelector('.wordle-message');
     if (existing) existing.remove();
     
     const msg = document.createElement('div');
     msg.className = 'wordle-message';
+    
+    if (isLevelUp) {
+      msg.classList.add('level-up-message');
+    }
+    
     msg.textContent = text;
     root.appendChild(msg);
   }

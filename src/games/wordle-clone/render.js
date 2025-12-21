@@ -18,15 +18,19 @@ export function renderWordleGrid(root) {
       </div>
 
       <div class="keyboard">
-        ${['QWERTYUIOP', 'ASDFGHJKL', 'ENTERZXCVBNM⌫']
-          .map(
-            row => `
-          <div class="key-row">
-            ${row.split('').map(key => `<button class="key">${key}</button>`).join('')}
-          </div>
-        `
-          )
-          .join('')}
+        <div class="key-row">
+          ${'QWERTYUIOP'.split('').map(k => `<button class="key">${k}</button>`).join('')}
+        </div>
+
+        <div class="key-row">
+          ${'ASDFGHJKL'.split('').map(k => `<button class="key">${k}</button>`).join('')}
+        </div>
+
+        <div class="key-row">
+          <button class="key special-key enter-key">ENTER</button>
+          ${'ZXCVBNM'.split('').map(k => `<button class="key">${k}</button>`).join('')}
+          <button class="key special-key">⌫</button>
+        </div>
       </div>
     </div>
   `;
