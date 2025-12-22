@@ -4,13 +4,16 @@ let ANSWERS = [];
 let ALLOWED = new Set();
 let loaded = false;
 
+// Get the base path from vite config
+const base = import.meta.env.BASE_URL || '/';
+
 export async function loadWordLists() {
   if (loaded) return;
 
   try {
     const [answersRes, allowedRes] = await Promise.all([
-      fetch('wordle-data/answers.json'),
-      fetch('wordle-data/allowed.json')
+      fetch(`${base}wordle-data/answers.json`),
+      fetch(`${base}wordle-data/allowed.json`)
     ]);
 
     if (!answersRes.ok || !allowedRes.ok) {

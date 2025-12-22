@@ -7,7 +7,7 @@ const REWARDS = [
     type: 'image',
     path: '/rewards/simpsons.png',
     title: 'A Picture of Me',
-    description: 'You unlocked your first reward! 💕'
+    description: 'You unlocked your first reward!'
   },
   {
     level: 2,

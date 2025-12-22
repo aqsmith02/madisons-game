@@ -162,23 +162,42 @@ export function startNameFour(container) {
   function finishGame() {
     persistProgress(true);
 
-    progression.addXP(XP_REWARD);
+    const result = progression.addXP(XP_REWARD);
     progression.markPlayedToday('name-four');
 
     input.disabled = true;
     document.querySelector('#guess-form button').disabled = true;
 
-    showCompletedMessage();
+    showCompletedMessage(result);
   }
 
-  function showCompletedMessage() {
-    completionMessage.innerHTML = `
+  function showCompletedMessage(result) {
+    let message = `
       <div class="completion">
         🎉 You got all four!
         <div class="xp">+${XP_REWARD} XP</div>
         <p>Solved in <strong>${guessCount}</strong> guesses</p>
+    `;
+
+    if (result && result.leveledUp && result.newRewards.length > 0) {
+      message += `
+        <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #5f8f7a 0%, #7fb3a1 100%); color: white; border-radius: 8px;">
+          <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">🎉 LEVEL UP! 🎉</div>
+          ${result.newRewards.map(reward => `
+            <div style="margin-top: 10px;">
+              <strong>${reward.title}</strong>
+              <div style="font-size: 0.9rem; opacity: 0.9;">${reward.description}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    message += `
         <p>Come back tomorrow for a new category</p>
       </div>
     `;
+
+    completionMessage.innerHTML = message;
   }
 }

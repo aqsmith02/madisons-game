@@ -194,8 +194,17 @@ export async function startWordle(container) {
     progression.markPlayedToday('wordle');
 
     if (won) {
-      progression.addXP(WIN_XP);
-      showMessage(`🎉 You got it! +${WIN_XP} XP`);
+      const result = progression.addXP(WIN_XP);
+      let message = `🎉 You got it! +${WIN_XP} XP`;
+      
+      if (result.leveledUp && result.newRewards.length > 0) {
+        message += `\n\n🎉 LEVEL UP! 🎉\n`;
+        result.newRewards.forEach(reward => {
+          message += `\nUnlocked: ${reward.title}`;
+        });
+      }
+      
+      showMessage(message);
     } else {
       showMessage(`😢 The word was ${ANSWER}`);
     }
