@@ -80,6 +80,7 @@ export function startNameFour(container) {
         </button>
       </form>
 
+      <div id="feedback-message" class="feedback-message"></div>
       <div id="completion-message"></div>
       <div id="level-up-message"></div>
     </div>
@@ -94,6 +95,7 @@ export function startNameFour(container) {
   const grid = document.getElementById('answer-grid');
   const completionMessage = document.getElementById('completion-message');
   const levelUpMessage = document.getElementById('level-up-message');
+  const feedbackMessage = document.getElementById('feedback-message');
 
   // ✅ BACK BUTTON HANDLERS (RESTORED)
   document.getElementById('back-home').onclick = () => window.showHome();
@@ -130,11 +132,22 @@ export function startNameFour(container) {
         unopenedBoxes = result.unopenedBoxes;
       }
 
-      renderGrid();
-
-      if (found.size + revealed.size === 4) {
-        finishGame();
-      }
+      showFeedback(guess, true);
+      
+      setTimeout(() => {
+        renderGrid();
+        feedbackMessage.innerHTML = '';
+        
+        if (found.size + revealed.size === 4) {
+          finishGame();
+        }
+      }, 1500);
+    } else {
+      showFeedback(guess, false);
+      
+      setTimeout(() => {
+        feedbackMessage.innerHTML = '';
+      }, 1500);
     }
 
     persist();
@@ -186,6 +199,21 @@ export function startNameFour(container) {
   /* =========================
      XP + PROGRESS
   ========================= */
+  function showFeedback(guess, correct) {
+    feedbackMessage.innerHTML = `
+      <div class="feedback-display ${correct ? 'correct' : 'incorrect'}">
+        <div class="feedback-icon">${correct ? '✓' : '✗'}</div>
+        <div class="feedback-text">
+          ${correct ? 'Correct!' : 'Not quite!'}
+        </div>
+        <div class="feedback-answer">
+          ${correct ? guess : `Try again!`}
+        </div>
+        <div class="xp-earned">+${correct ? XP_PER_ANSWER : 0} XP</div>
+      </div>
+    `;
+  }
+
   function awardXP() {
     xpAwarded += XP_PER_ANSWER;
     return progression.addXP(XP_PER_ANSWER);
