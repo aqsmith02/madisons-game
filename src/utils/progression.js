@@ -229,7 +229,8 @@ export class ProgressionSystem {
     return STICKERS.map(sticker => ({
       ...sticker,
       owned: this.stickerCollection[sticker.id] || 0,
-      isNew: !this.stickerCollection[sticker.id]
+      isNew: !this.stickerCollection[sticker.id],
+      isLocked: !this.stickerCollection[sticker.id]
     }));
   }
 

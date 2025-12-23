@@ -287,7 +287,7 @@ function showCollection() {
                   ${sticker.owned > 1 ? `<div class="sticker-count">×${sticker.owned}</div>` : ''}
                 ` : `
                   <div class="sticker-locked">🔒</div>
-                  <div class="sticker-name">???</div>
+                  <div class="sticker-name">${sticker.name}</div>
                 `}
               </div>
             `).join('')}
