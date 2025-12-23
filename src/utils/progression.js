@@ -5,30 +5,30 @@ const STICKERS = [
   // Common (50% chance) - 8 stickers
   { id: 1, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
   { id: 2, name: 'Full Belly Andrew', rarity: 'common', weight: 8, image: 'stickers/full_belly.png' },
-  { id: 3, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
-  { id: 4, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
-  { id: 5, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
-  { id: 6, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
-  { id: 7, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
-  { id: 8, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
+  { id: 3, name: 'Baby Andrew', rarity: 'common', weight: 8, image: 'stickers/baby.png' },
+  { id: 4, name: 'Gambler Andrew', rarity: 'common', weight: 8, image: 'stickers/gambler.png' },
+  { id: 5, name: 'Hotdog Andrew', rarity: 'common', weight: 6, image: 'stickers/hotdog.png' },
+  { id: 6, name: 'Chef Andrew', rarity: 'common', weight: 6, image: 'stickers/chef.png' },
+  { id: 7, name: 'Smart Andrew', rarity: 'common', weight: 6, image: 'stickers/smart.png' },
+  { id: 8, name: 'Tweety Andrew', rarity: 'common', weight: 6, image: 'stickers/tweety.png' },
   
   // Uncommon (30% chance) - 7 stickers
-  { id: 9, name: 'Robber Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/robber.png' },
-  { id: 10, name: 'Robber Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/robber.png' },
-  { id: 11, name: 'Robber Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/robber.png' },
-  { id: 12, name: 'Robber Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/robber.png' },
-  { id: 13, name: 'Robber Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/robber.png' },
-  { id: 14, name: 'Robber Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/robber.png' },
-  { id: 15, name: 'Robber Andrew', rarity: 'uncommon', weight: 3, image: 'stickers/robber.png' },
+  { id: 9, name: 'Cowboy Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/cowboy.png' },
+  { id: 10, name: 'Rapper Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/rapper.png' },
+  { id: 11, name: 'Racer Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/racer.png' },
+  { id: 12, name: 'Dancing Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/dancer.png' },
+  { id: 13, name: 'Judge Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/judge.png' },
+  { id: 14, name: 'Wizard Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/wizard.png' },
+  { id: 15, name: 'Gardener Andrew', rarity: 'uncommon', weight: 3, image: 'stickers/gardener.png' },
   
   // Rare (15% chance) - 3 stickers
-  { id: 16, name: 'Robber Andrew', rarity: 'rare', weight: 3, image: 'stickers/robber.png' },
-  { id: 17, name: 'Robber Andrew', rarity: 'rare', weight: 3, image: 'stickers/robber.png' },
-  { id: 18, name: 'Robber Andrew', rarity: 'rare', weight: 2, image: 'stickers/robber.png' },
+  { id: 16, name: 'Pirate Andrew', rarity: 'rare', weight: 3, image: 'stickers/pirate.png' },
+  { id: 17, name: 'Successful Andrew', rarity: 'rare', weight: 3, image: 'stickers/successful.png' },
+  { id: 18, name: 'Spinosaurus Andrew', rarity: 'rare', weight: 2, image: 'stickers/spinosaurus.png' },
   
   // Legendary (5% chance) - 2 stickers
-  { id: 19, name: 'Robber Andrew', rarity: 'legendary', weight: 1.5, image: 'stickers/robber.png' },
-  { id: 20, name: 'Robber Andrew', rarity: 'legendary', weight: 1, image: 'stickers/robber.png' }
+  { id: 19, name: 'Poochaco Andrew', rarity: 'legendary', weight: 1.5, image: 'stickers/poochaco.png' },
+  { id: 20, name: 'Andrew Simpson', rarity: 'legendary', weight: 1, image: 'stickers/simpson.png' }
 ];
 
 const XP_PER_LEVEL = 300;
