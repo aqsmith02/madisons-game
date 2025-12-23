@@ -98,10 +98,12 @@ export class ProgressionSystem {
       // Mystery boxes waiting to be opened
       this.unopenedBoxes = data.unopenedBoxes || 0;
     } else {
+      // First time user - give them a welcome mystery box!
       this.totalXP = 0;
       this.lastPlayed = {};
       this.stickerCollection = {};
-      this.unopenedBoxes = 0;
+      this.unopenedBoxes = 1;
+      this.save(); // Save immediately so they get the box
     }
   }
 

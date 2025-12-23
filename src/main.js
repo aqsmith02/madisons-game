@@ -20,11 +20,24 @@ function showHome() {
   const xpProgress = progression.getXPProgressInLevel();
   const unopenedBoxes = progression.getUnopenedBoxes();
   const stats = progression.getCollectionStats();
+  
+  // Check if this is a first-time user (has a box but no stickers yet)
+  const isNewUser = unopenedBoxes > 0 && stats.uniqueOwned === 0;
 
   app.innerHTML = `
     <div class="home-screen">
       <header class="app-header">
         <h1>The Andrew Times Games</h1>
+        
+        ${isNewUser ? `
+          <div class="welcome-message">
+            <div class="welcome-icon">
+              <img src="./misc/welcome.png" alt="Welcome" />
+            </div>
+            <h2>Welcome!</h2>
+            <p>Thanks for visiting! You've earned a free mystery box to get you started. Open it to receive your first sticker!</p>
+          </div>
+        ` : ''}
 
         <div class="progress-summary">
           <div class="level-info">
