@@ -11,7 +11,7 @@ export const QUESTIONS = [
   { id: 8, optionA: "WW2", optionB: "Vietnam", answer: "B" },
   { id: 9, optionA: "Oil", optionB: "Acrylic", answer: "A" },
   { id: 10, optionA: "Pearl Jam", optionB: "Alice in Chains", answer: "A" },
-  { id: 11, optionA: "Sophomore Year HS", optionB: "Sophomore Year College", answer: "A" },
+  { id: 11, optionA: "Sophomore Year High School", optionB: "Sophomore Year College", answer: "A" },
   { id: 12, optionA: "Calculus", optionB: "Statistics", answer: "A" },
   { id: 13, optionA: "George Bush", optionB: "Bill Clinton", answer: "A" },
   { id: 14, optionA: "Quiche", optionB: "Roast", answer: "A" },

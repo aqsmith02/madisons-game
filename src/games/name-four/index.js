@@ -81,6 +81,7 @@ export function startNameFour(container) {
       </form>
 
       <div id="completion-message"></div>
+      <div id="level-up-message"></div>
     </div>
 
     <!-- MOBILE BACK BAR -->
@@ -92,6 +93,7 @@ export function startNameFour(container) {
   const input = document.getElementById('guess-input');
   const grid = document.getElementById('answer-grid');
   const completionMessage = document.getElementById('completion-message');
+  const levelUpMessage = document.getElementById('level-up-message');
 
   // ✅ BACK BUTTON HANDLERS (RESTORED)
   document.getElementById('back-home').onclick = () => window.showHome();
@@ -212,33 +214,40 @@ export function startNameFour(container) {
   }
 
   function showCompletionMessage() {
-    let content = `
-      <div class="completion">
-        🎉 Puzzle complete
-        <div class="xp">+${xpAwarded} XP</div>
-        <p>Total guesses: <strong>${guessCount}</strong></p>
-    `;
-
     if (totalLevelsGained > 0) {
-      content += `
-        <div class="level-up-section">
-          <div class="level-up-title">🎉 LEVEL UP! 🎉</div>
-          <div class="level-up-reward">
-            <strong>
+      // Green box with level-up
+      completionMessage.innerHTML = `
+        <div class="completion completion-with-levelup">
+          <div style="font-size: 1.3rem; margin-bottom: 10px;">🎉 Puzzle complete</div>
+          <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 8px;">+${xpAwarded} XP</div>
+          <div style="margin-bottom: 15px;">Total guesses: <strong>${guessCount}</strong></div>
+          
+          <div style="font-size: 1.4rem; font-weight: 700; margin: 15px 0 10px;">🎉 LEVEL UP! 🎉</div>
+          <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 8px; margin-top: 10px;">
+            <div style="font-size: 1.1rem; margin-bottom: 8px;">
               You gained ${totalLevelsGained} ${totalLevelsGained === 1 ? 'level' : 'levels'}!
-            </strong>
-            <div class="level-up-desc">
-              ${unopenedBoxes} mystery ${unopenedBoxes === 1 ? 'box' : 'boxes'} waiting
+            </div>
+            <div style="margin-bottom: 12px;">
+              ${unopenedBoxes} mystery ${unopenedBoxes === 1 ? 'box' : 'boxes'} waiting for you!
             </div>
             <button class="open-boxes-btn" onclick="window.showMysteryBox()">
               Open Mystery ${unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
             </button>
           </div>
+          
+          <div style="margin-top: 15px;">Come back tomorrow for a new category</div>
+        </div>
+      `;
+    } else {
+      // Regular white box without level-up
+      completionMessage.innerHTML = `
+        <div class="completion">
+          🎉 Puzzle complete
+          <div class="xp">+${xpAwarded} XP</div>
+          <p>Total guesses: <strong>${guessCount}</strong></p>
+          <p>Come back tomorrow for a new category</p>
         </div>
       `;
     }
-
-    content += `<p>Come back tomorrow for a new category</p></div>`;
-    completionMessage.innerHTML = content;
   }
 }

@@ -139,27 +139,43 @@ export class ThisOrThatGame {
     let content = `
       <div class="completion-screen">
         <h2>Today's Results</h2>
+    `;
+
+    // If leveled up, use green completion box
+    if (this.totalLevelsGained > 0) {
+      content += `
+        <div class="completion-box completion-box-levelup">
+          <div style="font-size: 2rem; margin-bottom: 15px;">${this.score} / 100 XP</div>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${percentage}%"></div>
+          </div>
+          <div style="font-size: 1.1rem; margin: 15px 0;">
+            You got ${this.answers.filter(a => a.correct).length} out of ${this.questions.length} correct!
+          </div>
+          
+          <div style="font-size: 1.4rem; font-weight: 700; margin: 20px 0 10px;">🎉 LEVEL UP! 🎉</div>
+          <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 8px; margin-top: 10px;">
+            <div style="font-size: 1.1rem; margin-bottom: 8px;">
+              You gained ${this.totalLevelsGained} ${this.totalLevelsGained === 1 ? 'level' : 'levels'}!
+            </div>
+            <div style="margin-bottom: 12px;">
+              ${this.unopenedBoxes} mystery ${this.unopenedBoxes === 1 ? 'box' : 'boxes'} waiting for you!
+            </div>
+            <button class="open-boxes-btn" onclick="window.showMysteryBox()">
+              Open Mystery ${this.unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
+            </button>
+          </div>
+        </div>
+      `;
+    } else {
+      // Regular white box without level-up
+      content += `
         <div class="final-score">${this.score} / 100 XP</div>
         <div class="score-bar">
           <div class="score-fill" style="width: ${percentage}%"></div>
         </div>
         <div class="summary">
           You got ${this.answers.filter(a => a.correct).length} out of ${this.questions.length} correct!
-        </div>
-    `;
-
-    // Show mystery box notification if leveled up
-    if (this.totalLevelsGained > 0) {
-      content += `
-        <div class="level-up">
-          <div class="level-up-banner">🎉 LEVEL UP! 🎉</div>
-          <div class="new-reward">
-            <strong>You gained ${this.totalLevelsGained} ${this.totalLevelsGained === 1 ? 'level' : 'levels'}!</strong>
-            <div>${this.unopenedBoxes} mystery ${this.unopenedBoxes === 1 ? 'box' : 'boxes'} waiting for you!</div>
-            <button class="open-boxes-btn" onclick="window.showMysteryBox()">
-              Open Mystery ${this.unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
-            </button>
-          </div>
         </div>
       `;
     }

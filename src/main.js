@@ -67,7 +67,7 @@ function showHome() {
           <div class="game-xp">Up to 100 XP</div>
 
           ${progression.hasPlayedToday('thisOrThat')
-            ? '<div class="completed-badge">✓ Completed – Click to Review</div>'
+            ? '<div class="completed-badge">✓ Completed — Click to Review</div>'
             : '<div class="play-badge">Play Now</div>'
           }
         </div>
@@ -83,7 +83,7 @@ function showHome() {
           <div class="game-xp">100 XP</div>
 
           ${progression.hasPlayedToday('wordle')
-            ? '<div class="completed-badge">✓ Completed – Click to Review</div>'
+            ? '<div class="completed-badge">✓ Completed — Click to Review</div>'
             : '<div class="play-badge">Play Now</div>'
           }
         </div>
@@ -99,7 +99,7 @@ function showHome() {
           <div class="game-xp">Up to 100 XP</div>
 
           ${progression.hasPlayedToday('name-four')
-            ? '<div class="completed-badge">✓ Completed – Click to Review</div>'
+            ? '<div class="completed-badge">✓ Completed — Click to Review</div>'
             : '<div class="play-badge">Play Now</div>'
           }
         </div>
@@ -314,7 +314,12 @@ async function handleGameClick(gameName) {
 }
 
 async function playGame(gameName) {
-  app.innerHTML = '<div id="game-container"></div>';
+  app.innerHTML = `
+    <div id="game-container"></div>
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
+    </div>
+  `;
   const container = document.getElementById('game-container');
 
   if (gameName === 'thisOrThat') {
@@ -331,7 +336,12 @@ async function playGame(gameName) {
 }
 
 function reviewGame(gameName) {
-  app.innerHTML = '<div id="game-container"></div>';
+  app.innerHTML = `
+    <div id="game-container"></div>
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
+    </div>
+  `;
   const container = document.getElementById('game-container');
 
   if (gameName === 'thisOrThat') {

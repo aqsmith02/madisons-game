@@ -237,20 +237,7 @@ export async function startWordle(container) {
         <div style="margin-bottom: 12px;">
           ${unopenedBoxes} mystery ${unopenedBoxes === 1 ? 'box' : 'boxes'} waiting for you!
         </div>
-        <button class="open-boxes-btn" onclick="window.showMysteryBox()" style="
-          padding: 12px 24px;
-          background: white;
-          color: #5f8f7a;
-          border: none;
-          border-radius: 8px;
-          font-weight: 700;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: all 0.3s;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-          width: 100%;
-          margin-top: 5px;
-        ">
+        <button class="open-boxes-btn" onclick="window.showMysteryBox()">
           Open Mystery ${unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
         </button>
       </div>

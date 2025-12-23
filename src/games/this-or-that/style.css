@@ -166,6 +166,17 @@
   color: #1a1a1a;
 }
 
+.completion-box-levelup {
+  background: linear-gradient(135deg, #5f8f7a 0%, #7fb3a1 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin: 20px auto 30px;
+  max-width: 600px;
+  animation: levelUpPulse 0.6s;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
 .final-score {
   font-size: 3rem;
   font-weight: 700;
@@ -183,10 +194,18 @@
   margin: 0 auto 20px;
 }
 
+.completion-box-levelup .score-bar {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .score-fill {
   height: 100%;
   background: linear-gradient(90deg, #5f8f7a, #7fb3a1);
   transition: width 1s ease;
+}
+
+.completion-box-levelup .score-fill {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.95));
 }
 
 .summary {
