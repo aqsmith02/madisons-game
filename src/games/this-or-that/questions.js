@@ -45,7 +45,7 @@ export const QUESTIONS = [
   { id: 41, optionA: "Sweet", optionB: "Savory", answer: "A" },
   { id: 42, optionA: "Stubbed Toe", optionB: "Pinched Finger", answer: "B" },
   { id: 43, optionA: "Mixed Drink", optionB: "Shots", answer: "A" },
-  { id: 44, optionA: "Disney", optionB: "Universal", answer: "A" },
+  { id: 44, optionA: "Disney", optionB: "Universal", answer: "B" },
   { id: 45, optionA: "In Rainbows", optionB: "Kid A", answer: "B" },
   { id: 46, optionA: "Family Guy", optionB: "Rick and Morty", answer: "A" },
   { id: 47, optionA: "Cruise", optionB: "Train", answer: "B" },

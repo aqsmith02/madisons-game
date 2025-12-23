@@ -112,7 +112,7 @@ function showHome() {
             <img src="./game-icons/name_four_192.png" alt="Name Four" />
           </div>
           <h3>Name Four</h3>
-          <p>Find the four that belong together</p>
+          <p>Guess What Four Things Fit The Category</p>
           <div class="game-xp">Up to 100 XP</div>
 
           ${progression.hasPlayedToday('name-four')
@@ -144,7 +144,7 @@ function showHome() {
             <img src="./game-icons/blackjack_192.png" alt="Blackjack" />
           </div>
           <h3>Blackjack</h3>
-          <p>Bet XP to win double</p>
+          <p>Come gamble your XP</p>
           <div class="game-xp">Bet 5-50 XP</div>
           <div class="play-badge">Play Now</div>
         </div>
