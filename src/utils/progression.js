@@ -1,38 +1,70 @@
 // src/utils/progression.js
 
-// Define all 20 stickers with rarities
+// Rarity drop rates
+const RARITY_DROP_RATES = {
+  common: 0.50,      // 50%
+  uncommon: 0.30,    // 30%
+  rare: 0.15,        // 15%
+  legendary: 0.05    // 5%
+};
+
+// Define all 20 stickers with rarities (no manual weights needed)
 const STICKERS = [
   // Common (50% chance) - 8 stickers
-  { id: 1, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
-  { id: 2, name: 'Full Belly Andrew', rarity: 'common', weight: 8, image: 'stickers/full_belly.png' },
-  { id: 3, name: 'Baby Andrew', rarity: 'common', weight: 8, image: 'stickers/baby.png' },
-  { id: 4, name: 'Gambler Andrew', rarity: 'common', weight: 8, image: 'stickers/gambler.png' },
-  { id: 5, name: 'Hotdog Andrew', rarity: 'common', weight: 6, image: 'stickers/hotdog.png' },
-  { id: 6, name: 'Chef Andrew', rarity: 'common', weight: 6, image: 'stickers/chef.png' },
-  { id: 7, name: 'Smart Andrew', rarity: 'common', weight: 6, image: 'stickers/smart.png' },
-  { id: 8, name: 'Tweety Andrew', rarity: 'common', weight: 6, image: 'stickers/tweety.png' },
+  { id: 1, name: 'Robber Andrew', rarity: 'common', image: 'stickers/robber.png' },
+  { id: 2, name: 'Full Belly Andrew', rarity: 'common', image: 'stickers/full_belly.png' },
+  { id: 3, name: 'Baby Andrew', rarity: 'common', image: 'stickers/baby.png' },
+  { id: 4, name: 'Gambler Andrew', rarity: 'common', image: 'stickers/gambler.png' },
+  { id: 5, name: 'Hotdog Andrew', rarity: 'common', image: 'stickers/hotdog.png' },
+  { id: 6, name: 'Chef Andrew', rarity: 'common', image: 'stickers/chef.png' },
+  { id: 7, name: 'Smart Andrew', rarity: 'common', image: 'stickers/smart.png' },
+  { id: 8, name: 'Tweety Andrew', rarity: 'common', image: 'stickers/tweety.png' },
   
   // Uncommon (30% chance) - 7 stickers
-  { id: 9, name: 'Cowboy Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/cowboy.png' },
-  { id: 10, name: 'Rapper Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/rapper.png' },
-  { id: 11, name: 'Racer Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/racer.png' },
-  { id: 12, name: 'Dancing Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/dancer.png' },
-  { id: 13, name: 'Judge Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/judge.png' },
-  { id: 14, name: 'Wizard Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/wizard.png' },
-  { id: 15, name: 'Gardener Andrew', rarity: 'uncommon', weight: 3, image: 'stickers/gardener.png' },
+  { id: 9, name: 'Cowboy Andrew', rarity: 'uncommon', image: 'stickers/cowboy.png' },
+  { id: 10, name: 'Rapper Andrew', rarity: 'uncommon', image: 'stickers/rapper.png' },
+  { id: 11, name: 'Racer Andrew', rarity: 'uncommon', image: 'stickers/racer.png' },
+  { id: 12, name: 'Dancing Andrew', rarity: 'uncommon', image: 'stickers/dancer.png' },
+  { id: 13, name: 'Judge Andrew', rarity: 'uncommon', image: 'stickers/judge.png' },
+  { id: 14, name: 'Wizard Andrew', rarity: 'uncommon', image: 'stickers/wizard.png' },
+  { id: 15, name: 'Gardener Andrew', rarity: 'uncommon', image: 'stickers/gardener.png' },
   
   // Rare (15% chance) - 3 stickers
-  { id: 16, name: 'Pirate Andrew', rarity: 'rare', weight: 3, image: 'stickers/pirate.png' },
-  { id: 17, name: 'Successful Andrew', rarity: 'rare', weight: 3, image: 'stickers/successful.png' },
-  { id: 18, name: 'Spinosaurus Andrew', rarity: 'rare', weight: 2, image: 'stickers/spinosaurus.png' },
+  { id: 16, name: 'Pirate Andrew', rarity: 'rare', image: 'stickers/pirate.png' },
+  { id: 17, name: 'Successful Andrew', rarity: 'rare', image: 'stickers/successful.png' },
+  { id: 18, name: 'Spinosaurus Andrew', rarity: 'rare', image: 'stickers/spinosaurus.png' },
   
   // Legendary (5% chance) - 2 stickers
-  { id: 19, name: 'Poochaco Andrew', rarity: 'legendary', weight: 1.5, image: 'stickers/poochaco.png' },
-  { id: 20, name: 'Andrew Simpson', rarity: 'legendary', weight: 1, image: 'stickers/simpson.png' }
+  { id: 19, name: 'Poochaco Andrew', rarity: 'legendary', image: 'stickers/poochaco.png' },
+  { id: 20, name: 'Andrew Simpson', rarity: 'legendary', image: 'stickers/simpson.png' }
 ];
 
+// Calculate weights automatically based on rarity drop rates
+function calculateWeights() {
+  const rarityCounts = {};
+  
+  // Count stickers per rarity
+  STICKERS.forEach(sticker => {
+    rarityCounts[sticker.rarity] = (rarityCounts[sticker.rarity] || 0) + 1;
+  });
+  
+  // Assign weights to each sticker based on its rarity
+  return STICKERS.map(sticker => ({
+    ...sticker,
+    weight: RARITY_DROP_RATES[sticker.rarity] / rarityCounts[sticker.rarity]
+  }));
+}
+
+const WEIGHTED_STICKERS = calculateWeights();
+
 const XP_PER_LEVEL = 300;
-const DUPLICATE_BONUS_XP = 25;
+
+const DUPLICATE_BONUS_XP = {
+  common: 25,
+  uncommon: 50,
+  rare: 100,
+  legendary: 200
+};
 
 const RARITY_COLORS = {
   common: '#9ca3af',
@@ -132,10 +164,10 @@ export class ProgressionSystem {
     // Reduce unopened boxes
     this.unopenedBoxes--;
     
-    // Award bonus XP for duplicates
+    // Award bonus XP for duplicates based on rarity
     let bonusXP = 0;
     if (isDuplicate) {
-      bonusXP = DUPLICATE_BONUS_XP;
+      bonusXP = DUPLICATE_BONUS_XP[sticker.rarity];
       this.totalXP += bonusXP;
     }
     
@@ -151,17 +183,17 @@ export class ProgressionSystem {
 
   // Weighted random selection
   getRandomSticker() {
-    const totalWeight = STICKERS.reduce((sum, s) => sum + s.weight, 0);
+    const totalWeight = WEIGHTED_STICKERS.reduce((sum, s) => sum + s.weight, 0);
     let random = Math.random() * totalWeight;
     
-    for (const sticker of STICKERS) {
+    for (const sticker of WEIGHTED_STICKERS) {
       random -= sticker.weight;
       if (random <= 0) {
         return sticker;
       }
     }
     
-    return STICKERS[STICKERS.length - 1]; // Fallback
+    return WEIGHTED_STICKERS[WEIGHTED_STICKERS.length - 1]; // Fallback
   }
 
   // Collection stats
