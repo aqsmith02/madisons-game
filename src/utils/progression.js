@@ -1,66 +1,52 @@
 // src/utils/progression.js
 
-const REWARDS = [
-  {
-    level: 1,
-    xpRequired: 300,
-    type: 'image',
-    path: 'rewards/simpsons.png',
-    title: 'A Picture of Me',
-    description: 'You unlocked your first reward!'
-  },
-  {
-    level: 2,
-    xpRequired: 600,
-    type: 'image',
-    path: 'rewards/lil_madison.png',
-    title: 'Me Singing For You',
-    description: 'Hope you enjoy this... 🎤😅'
-  },
-  {
-    level: 3,
-    xpRequired: 900,
-    type: 'text',
-    title: 'A Poem Just For You',
-    content: `Your poem will go here...
-    
-Multiple lines work!
-You can write something sweet 💕`,
-    description: 'A special poem written just for you'
-  },
-  {
-    level: 4,
-    xpRequired: 1200,
-    type: 'text',
-    title: 'Coffee On Me! ☕',
-    content: 'This is an IOU for one coffee of your choice - my treat! Redeem anytime 😊',
-    description: 'Free coffee whenever you want!'
-  },
-  {
-    level: 5,
-    xpRequired: 1500,
-    type: 'image',
-    path: 'rewards/simpsons.png',
-    title: 'Another Picture of Me',
-    description: 'Another one for your collection! 📸'
-  },
-  {
-    level: 6,
-    xpRequired: 1800,
-    type: 'image',
-    path: 'rewards/lil_madison.png',
-    title: 'Funny Video',
-    description: 'Prepare to laugh 😂'
-  },
-  {
-    level: 7,
-    xpRequired: 2100,
-    type: 'text',
-    title: 'Ultimate Embarrassment IOU',
-    content: 'I will embarrass myself in ANY way you ask. No limits. You have full control. Use this power wisely... 😰',
-    description: 'The ultimate reward - make me do anything!'
-  }
+// Define all 20 stickers with rarities
+const STICKERS = [
+  // Common (50% chance) - 8 stickers
+  { id: 1, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
+  { id: 2, name: 'Full Belly Andrew', rarity: 'common', weight: 8, image: 'stickers/full_belly.png' },
+  { id: 3, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
+  { id: 4, name: 'Robber Andrew', rarity: 'common', weight: 8, image: 'stickers/robber.png' },
+  { id: 5, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
+  { id: 6, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
+  { id: 7, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
+  { id: 8, name: 'Robber Andrew', rarity: 'common', weight: 6, image: 'stickers/robber.png' },
+  
+  // Uncommon (30% chance) - 7 stickers
+  { id: 9, name: 'Robber Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/robber.png' },
+  { id: 10, name: 'Robber Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/robber.png' },
+  { id: 11, name: 'Robber Andrew', rarity: 'uncommon', weight: 5, image: 'stickers/robber.png' },
+  { id: 12, name: 'Robber Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/robber.png' },
+  { id: 13, name: 'Robber Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/robber.png' },
+  { id: 14, name: 'Robber Andrew', rarity: 'uncommon', weight: 4, image: 'stickers/robber.png' },
+  { id: 15, name: 'Robber Andrew', rarity: 'uncommon', weight: 3, image: 'stickers/robber.png' },
+  
+  // Rare (15% chance) - 3 stickers
+  { id: 16, name: 'Robber Andrew', rarity: 'rare', weight: 3, image: 'stickers/robber.png' },
+  { id: 17, name: 'Robber Andrew', rarity: 'rare', weight: 3, image: 'stickers/robber.png' },
+  { id: 18, name: 'Robber Andrew', rarity: 'rare', weight: 2, image: 'stickers/robber.png' },
+  
+  // Legendary (5% chance) - 2 stickers
+  { id: 19, name: 'Robber Andrew', rarity: 'legendary', weight: 1.5, image: 'stickers/robber.png' },
+  { id: 20, name: 'Robber Andrew', rarity: 'legendary', weight: 1, image: 'stickers/robber.png' }
 ];
+
+const XP_PER_LEVEL = 300;
+const DUPLICATE_BONUS_XP = 25;
+
+const RARITY_COLORS = {
+  common: '#9ca3af',
+  uncommon: '#10b981',
+  rare: '#3b82f6',
+  legendary: '#f59e0b'
+};
+
+const RARITY_LABELS = {
+  common: 'Common',
+  uncommon: 'Uncommon',
+  rare: 'Rare',
+  legendary: 'Legendary'
+};
 
 export class ProgressionSystem {
   constructor() {
@@ -72,20 +58,27 @@ export class ProgressionSystem {
     if (saved) {
       const data = JSON.parse(saved);
       this.totalXP = data.totalXP || 0;
-      this.unlockedRewards = data.unlockedRewards || [];
       this.lastPlayed = data.lastPlayed || {};
+      
+      // Sticker collection: { stickerId: count }
+      this.stickerCollection = data.stickerCollection || {};
+      
+      // Mystery boxes waiting to be opened
+      this.unopenedBoxes = data.unopenedBoxes || 0;
     } else {
       this.totalXP = 0;
-      this.unlockedRewards = [];
       this.lastPlayed = {};
+      this.stickerCollection = {};
+      this.unopenedBoxes = 0;
     }
   }
 
   save() {
     localStorage.setItem('gameProgress', JSON.stringify({
       totalXP: this.totalXP,
-      unlockedRewards: this.unlockedRewards,
-      lastPlayed: this.lastPlayed
+      lastPlayed: this.lastPlayed,
+      stickerCollection: this.stickerCollection,
+      unopenedBoxes: this.unopenedBoxes
     }));
   }
 
@@ -94,49 +87,122 @@ export class ProgressionSystem {
     this.totalXP += amount;
     const newLevel = this.getCurrentLevel();
     
-    this.save();
-    
-    // Check if leveled up
-    if (newLevel > oldLevel) {
-      const newRewards = [];
-      for (let i = oldLevel + 1; i <= newLevel; i++) {
-        if (!this.unlockedRewards.includes(i)) {
-          this.unlockedRewards.push(i);
-          newRewards.push(REWARDS[i - 1]);
-        }
-      }
-      return { leveledUp: true, newRewards };
+    // Award mystery boxes for each level gained
+    const levelsGained = newLevel - oldLevel;
+    if (levelsGained > 0) {
+      this.unopenedBoxes += levelsGained;
     }
     
-    return { leveledUp: false };
+    this.save();
+    
+    return { 
+      leveledUp: levelsGained > 0, 
+      levelsGained,
+      unopenedBoxes: this.unopenedBoxes 
+    };
   }
 
   getCurrentLevel() {
-    for (let i = REWARDS.length - 1; i >= 0; i--) {
-      if (this.totalXP >= REWARDS[i].xpRequired) {
-        return REWARDS[i].level;
-      }
-    }
-    return 0;
-  }
-
-  getNextReward() {
-    const currentLevel = this.getCurrentLevel();
-    return REWARDS[currentLevel] || null;
+    return Math.floor(this.totalXP / XP_PER_LEVEL);
   }
 
   getXPToNextLevel() {
-    const nextReward = this.getNextReward();
-    if (!nextReward) return 0;
-    return nextReward.xpRequired - this.totalXP;
+    const currentLevel = this.getCurrentLevel();
+    const nextLevelXP = (currentLevel + 1) * XP_PER_LEVEL;
+    return nextLevelXP - this.totalXP;
   }
 
-  getAllRewards() {
-    return REWARDS;
+  getXPProgressInLevel() {
+    const currentLevelBase = this.getCurrentLevel() * XP_PER_LEVEL;
+    return this.totalXP - currentLevelBase;
   }
 
-  getUnlockedRewards() {
-    return REWARDS.filter(r => this.unlockedRewards.includes(r.level));
+  // Open a mystery box and get a random sticker
+  openMysteryBox() {
+    if (this.unopenedBoxes <= 0) {
+      return null;
+    }
+
+    const sticker = this.getRandomSticker();
+    const isDuplicate = this.stickerCollection[sticker.id] > 0;
+    
+    // Add to collection
+    this.stickerCollection[sticker.id] = (this.stickerCollection[sticker.id] || 0) + 1;
+    
+    // Reduce unopened boxes
+    this.unopenedBoxes--;
+    
+    // Award bonus XP for duplicates
+    let bonusXP = 0;
+    if (isDuplicate) {
+      bonusXP = DUPLICATE_BONUS_XP;
+      this.totalXP += bonusXP;
+    }
+    
+    this.save();
+    
+    return {
+      sticker,
+      isDuplicate,
+      bonusXP,
+      totalOwned: this.stickerCollection[sticker.id]
+    };
+  }
+
+  // Weighted random selection
+  getRandomSticker() {
+    const totalWeight = STICKERS.reduce((sum, s) => sum + s.weight, 0);
+    let random = Math.random() * totalWeight;
+    
+    for (const sticker of STICKERS) {
+      random -= sticker.weight;
+      if (random <= 0) {
+        return sticker;
+      }
+    }
+    
+    return STICKERS[STICKERS.length - 1]; // Fallback
+  }
+
+  // Collection stats
+  getCollectionStats() {
+    const uniqueOwned = Object.keys(this.stickerCollection).length;
+    const totalStickers = STICKERS.length;
+    const completionPercent = Math.round((uniqueOwned / totalStickers) * 100);
+    
+    const rarityStats = {
+      common: { owned: 0, total: 0 },
+      uncommon: { owned: 0, total: 0 },
+      rare: { owned: 0, total: 0 },
+      legendary: { owned: 0, total: 0 }
+    };
+    
+    STICKERS.forEach(sticker => {
+      rarityStats[sticker.rarity].total++;
+      if (this.stickerCollection[sticker.id]) {
+        rarityStats[sticker.rarity].owned++;
+      }
+    });
+    
+    return {
+      uniqueOwned,
+      totalStickers,
+      completionPercent,
+      rarityStats,
+      unopenedBoxes: this.unopenedBoxes
+    };
+  }
+
+  getAllStickers() {
+    return STICKERS.map(sticker => ({
+      ...sticker,
+      owned: this.stickerCollection[sticker.id] || 0,
+      isNew: !this.stickerCollection[sticker.id]
+    }));
+  }
+
+  getStickerById(id) {
+    return STICKERS.find(s => s.id === id);
   }
 
   hasPlayedToday(gameName) {
@@ -150,10 +216,14 @@ export class ProgressionSystem {
     this.save();
   }
 
-
   getTotalXP() {
     return this.totalXP;
+  }
+
+  getUnopenedBoxes() {
+    return this.unopenedBoxes;
   }
 }
 
 export const progression = new ProgressionSystem();
+export { RARITY_COLORS, RARITY_LABELS, STICKERS };

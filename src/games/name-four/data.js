@@ -226,7 +226,7 @@ export const NAME_FOUR_PUZZLES = [
     ]
   },
   {
-    category: 'Superheros I\'d Like To Be',
+    category: 'Superheroes I\'d Like To Be',
     answers: [
       'Batman',
       'Spiderman',

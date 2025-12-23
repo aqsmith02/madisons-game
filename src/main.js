@@ -6,7 +6,7 @@ import { startWordle } from './games/wordle-clone/index.js';
 import { reviewTodayWordle } from './games/wordle-clone/review.js';
 import { startNameFour } from './games/name-four/index.js';
 import { reviewNameFour } from './games/name-four/review.js';
-import { progression } from './utils/progression.js';
+import { progression, RARITY_COLORS, RARITY_LABELS } from './utils/progression.js';
 
 const app = document.getElementById('app');
 
@@ -17,7 +17,9 @@ function showHome() {
   const currentLevel = progression.getCurrentLevel();
   const totalXP = progression.getTotalXP();
   const xpToNext = progression.getXPToNextLevel();
-  const nextReward = progression.getNextReward();
+  const xpProgress = progression.getXPProgressInLevel();
+  const unopenedBoxes = progression.getUnopenedBoxes();
+  const stats = progression.getCollectionStats();
 
   app.innerHTML = `
     <div class="home-screen">
@@ -30,23 +32,30 @@ function showHome() {
             <span class="xp">${totalXP} XP</span>
           </div>
 
-          ${nextReward ? `
-            <div class="next-reward">
-              <div class="xp-bar">
-                <div class="xp-fill" style="width: ${((totalXP % 300) / 300) * 100}%"></div>
-              </div>
-              <div class="next-reward-text">
-                ${xpToNext} XP to next reward: ${nextReward.title}
-              </div>
+          <div class="xp-section">
+            <div class="xp-bar">
+              <div class="xp-fill" style="width: ${(xpProgress / 300) * 100}%"></div>
             </div>
-          ` : `
-            <div class="max-level">🎉 All rewards unlocked! 🎉</div>
-          `}
+            <div class="xp-text">${xpToNext} XP to Level ${currentLevel + 1}</div>
+          </div>
+
+          <div class="collection-summary">
+            <div class="collection-icon">🎁</div>
+            <div class="collection-info">
+              <div class="collection-progress">${stats.uniqueOwned}/${stats.totalStickers} Stickers</div>
+              <div class="collection-percent">${stats.completionPercent}% Complete</div>
+            </div>
+          </div>
+
+          ${unopenedBoxes > 0 ? `
+            <button class="mystery-box-alert" onclick="showMysteryBox()">
+              🎁 ${unopenedBoxes} Mystery ${unopenedBoxes === 1 ? 'Box' : 'Boxes'} Available!
+            </button>
+          ` : ''}
         </div>
       </header>
 
       <div class="game-cards">
-
         <!-- THIS OR THAT -->
         <div class="game-card ${progression.hasPlayedToday('thisOrThat') ? 'completed' : ''}"
              onclick="handleGameClick('thisOrThat')">
@@ -58,7 +67,7 @@ function showHome() {
           <div class="game-xp">Up to 100 XP</div>
 
           ${progression.hasPlayedToday('thisOrThat')
-            ? '<div class="completed-badge">✓ Completed — Click to Review</div>'
+            ? '<div class="completed-badge">✓ Completed – Click to Review</div>'
             : '<div class="play-badge">Play Now</div>'
           }
         </div>
@@ -74,7 +83,7 @@ function showHome() {
           <div class="game-xp">100 XP</div>
 
           ${progression.hasPlayedToday('wordle')
-            ? '<div class="completed-badge">✓ Completed — Click to Review</div>'
+            ? '<div class="completed-badge">✓ Completed – Click to Review</div>'
             : '<div class="play-badge">Play Now</div>'
           }
         </div>
@@ -90,16 +99,205 @@ function showHome() {
           <div class="game-xp">Up to 100 XP</div>
 
           ${progression.hasPlayedToday('name-four')
-            ? '<div class="completed-badge">✓ Completed — Click to Review</div>'
+            ? '<div class="completed-badge">✓ Completed – Click to Review</div>'
             : '<div class="play-badge">Play Now</div>'
           }
         </div>
-
       </div>
 
-      <button class="rewards-btn" onclick="showRewards()">
-        View Rewards & Progress
+      <button class="collection-btn" onclick="showCollection()">
+        View Sticker Collection
       </button>
+    </div>
+  `;
+}
+
+/* =========================
+   MYSTERY BOX SCREEN
+========================= */
+function showMysteryBox() {
+  app.innerHTML = `
+    <div class="mystery-box-screen">
+      <button class="back-btn" onclick="showHome()">← Back</button>
+      
+      <div class="mystery-box-container">
+        <h2>Mystery Box</h2>
+        <p class="mystery-subtitle">Open a box to reveal a sticker!</p>
+        
+        <div class="box-animation-area">
+          <div class="mystery-box" id="mysteryBox" onclick="openBox()">
+            <div class="box-lid">🎁</div>
+            <div class="box-body"></div>
+          </div>
+        </div>
+
+        <div class="boxes-remaining">
+          ${progression.getUnopenedBoxes()} ${progression.getUnopenedBoxes() === 1 ? 'box' : 'boxes'} remaining
+        </div>
+
+        <button class="open-box-btn" onclick="openBox()">
+          Open Box
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
+    </div>
+  `;
+}
+
+function openBox() {
+  const result = progression.openMysteryBox();
+  
+  if (!result) {
+    showHome();
+    return;
+  }
+
+  const { sticker, isDuplicate, bonusXP, totalOwned } = result;
+  
+  // Animate box opening
+  const boxEl = document.getElementById('mysteryBox');
+  boxEl.classList.add('opening');
+  
+  setTimeout(() => {
+    showStickerReveal(sticker, isDuplicate, bonusXP, totalOwned);
+  }, 800);
+}
+
+function showStickerReveal(sticker, isDuplicate, bonusXP, totalOwned) {
+  const rarityColor = RARITY_COLORS[sticker.rarity];
+  const rarityLabel = RARITY_LABELS[sticker.rarity];
+  const unopenedBoxes = progression.getUnopenedBoxes();
+
+  app.innerHTML = `
+    <div class="sticker-reveal-screen">
+      <div class="reveal-container">
+        <div class="reveal-card" style="border-color: ${rarityColor}">
+          <div class="reveal-rarity" style="color: ${rarityColor}">
+            ${rarityLabel}
+          </div>
+          
+          <div class="reveal-sticker">
+            <img src="${sticker.image}" alt="${sticker.name}" 
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect width=%22200%22 height=%22200%22 fill=%22${rarityColor}%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22 fill=%22white%22>${sticker.name.charAt(0)}</text></svg>'" />
+          </div>
+          
+          <div class="reveal-name">${sticker.name}</div>
+          
+          ${isDuplicate ? `
+            <div class="duplicate-badge">
+              <span class="duplicate-icon">×${totalOwned}</span>
+              <span class="duplicate-text">Duplicate! +${bonusXP} Bonus XP</span>
+            </div>
+          ` : `
+            <div class="new-badge">🌟 NEW!</div>
+          `}
+        </div>
+
+        <div class="reveal-actions">
+          ${unopenedBoxes > 0 ? `
+            <button class="reveal-btn primary" onclick="showMysteryBox()">
+              Open Another (${unopenedBoxes} left)
+            </button>
+          ` : ''}
+          
+          <button class="reveal-btn ${unopenedBoxes > 0 ? '' : 'primary'}" onclick="showCollection()">
+            View Collection
+          </button>
+          
+          <button class="reveal-btn" onclick="showHome()">
+            Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Add animation class
+  setTimeout(() => {
+    document.querySelector('.reveal-card').classList.add('animate-in');
+  }, 50);
+}
+
+/* =========================
+   COLLECTION SCREEN
+========================= */
+function showCollection() {
+  const allStickers = progression.getAllStickers();
+  const stats = progression.getCollectionStats();
+  const unopenedBoxes = progression.getUnopenedBoxes();
+
+  // Group by rarity
+  const byRarity = {
+    legendary: allStickers.filter(s => s.rarity === 'legendary'),
+    rare: allStickers.filter(s => s.rarity === 'rare'),
+    uncommon: allStickers.filter(s => s.rarity === 'uncommon'),
+    common: allStickers.filter(s => s.rarity === 'common')
+  };
+
+  app.innerHTML = `
+    <div class="collection-screen">
+      <button class="back-btn" onclick="showHome()">← Back</button>
+      
+      <div class="collection-header">
+        <h2>Sticker Collection</h2>
+        <div class="collection-stats">
+          <div class="stat">
+            <span class="stat-value">${stats.uniqueOwned}/${stats.totalStickers}</span>
+            <span class="stat-label">Collected</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">${stats.completionPercent}%</span>
+            <span class="stat-label">Complete</span>
+          </div>
+          ${unopenedBoxes > 0 ? `
+            <button class="stat open-boxes-btn" onclick="showMysteryBox()">
+              🎁 ${unopenedBoxes} ${unopenedBoxes === 1 ? 'Box' : 'Boxes'}
+            </button>
+          ` : ''}
+        </div>
+      </div>
+
+      <div class="rarity-breakdown">
+        ${Object.entries(stats.rarityStats).map(([rarity, data]) => `
+          <div class="rarity-stat" style="border-left: 3px solid ${RARITY_COLORS[rarity]}">
+            <span class="rarity-name" style="color: ${RARITY_COLORS[rarity]}">
+              ${RARITY_LABELS[rarity]}
+            </span>
+            <span class="rarity-count">${data.owned}/${data.total}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      ${Object.entries(byRarity).map(([rarity, stickers]) => `
+        <div class="sticker-section">
+          <h3 class="section-title" style="color: ${RARITY_COLORS[rarity]}">
+            ${RARITY_LABELS[rarity]} (${stickers.filter(s => s.owned > 0).length}/${stickers.length})
+          </h3>
+          <div class="sticker-grid">
+            ${stickers.map(sticker => `
+              <div class="sticker-card ${sticker.owned > 0 ? 'owned' : 'locked'}" 
+                   style="border-color: ${RARITY_COLORS[rarity]}">
+                ${sticker.owned > 0 ? `
+                  <img src="${sticker.image}" alt="${sticker.name}"
+                       onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22${RARITY_COLORS[rarity]}%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2232%22 fill=%22white%22>${sticker.name.charAt(0)}</text></svg>'" />
+                  <div class="sticker-name">${sticker.name}</div>
+                  ${sticker.owned > 1 ? `<div class="sticker-count">×${sticker.owned}</div>` : ''}
+                ` : `
+                  <div class="sticker-locked">🔒</div>
+                  <div class="sticker-name">???</div>
+                `}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="mobile-back-bar">
+      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
     </div>
   `;
 }
@@ -114,7 +312,6 @@ async function handleGameClick(gameName) {
     await playGame(gameName);
   }
 }
-
 
 async function playGame(gameName) {
   app.innerHTML = '<div id="game-container"></div>';
@@ -132,7 +329,6 @@ async function playGame(gameName) {
     startNameFour(container);
   }
 }
-
 
 function reviewGame(gameName) {
   app.innerHTML = '<div id="game-container"></div>';
@@ -152,66 +348,12 @@ function reviewGame(gameName) {
 }
 
 /* =========================
-   REWARDS SCREEN
-========================= */
-function showRewards() {
-  const unlockedRewards = progression.getUnlockedRewards();
-  const allRewards = progression.getAllRewards();
-
-  app.innerHTML = `
-    <div class="rewards-screen">
-      <button class="back-btn" onclick="showHome()">← Back</button>
-      <h2>Your Rewards</h2>
-
-      <div class="rewards-list">
-        ${allRewards.map(reward => {
-          const unlocked = unlockedRewards.some(r => r.level === reward.level);
-
-          return `
-            <div class="reward-item ${unlocked ? 'unlocked' : 'locked'}">
-              <div class="reward-header">
-                <span class="reward-level">Level ${reward.level}</span>
-                <span class="reward-xp">${reward.xpRequired} XP</span>
-              </div>
-
-              ${unlocked ? `
-                <h3>${reward.title}</h3>
-                <p class="reward-description">${reward.description}</p>
-
-                ${reward.type === 'text' ? `
-                  <div class="reward-content">${reward.content}</div>
-                ` : reward.type === 'image' ? `
-                  <div class="reward-media">
-                    <img src="${reward.path}" alt="${reward.title}" />
-                  </div>
-                ` : reward.type === 'video' ? `
-                  <div class="reward-media">
-                    <video controls>
-                      <source src="${reward.path}" type="video/mp4">
-                    </video>
-                  </div>
-                ` : ''}
-              ` : `
-                <h3>🔒 Locked</h3>
-                <p class="reward-description">Reach Level ${reward.level} to unlock!</p>
-              `}
-            </div>
-          `;
-        }).join('')}
-      </div>
-    </div>
-
-    <div class="mobile-back-bar">
-      <button class="mobile-back-btn" onclick="showHome()">← Back</button>
-    </div>
-  `;
-}
-
-/* =========================
    GLOBAL EXPORTS
 ========================= */
 window.showHome = showHome;
-window.showRewards = showRewards;
+window.showCollection = showCollection;
+window.showMysteryBox = showMysteryBox;
+window.openBox = openBox;
 window.handleGameClick = handleGameClick;
 
 /* =========================

@@ -32,6 +32,8 @@ export async function startWordle(container) {
   let currentCol = 0;
   let gameOver = hasSavedProgress ? false : (savedProgress && savedProgress.date === today);
   const guesses = hasSavedProgress ? [...savedProgress.guesses] : [];
+  let totalLevelsGained = 0; // Track total levels gained
+  let unopenedBoxes = 0; // Track mystery boxes
 
   container.innerHTML = `
     <div class="wordle-wrapper">
@@ -195,18 +197,15 @@ export async function startWordle(container) {
 
     if (won) {
       const result = progression.addXP(WIN_XP);
-      let message = `🎉 You got it! +${WIN_XP} XP`;
-      let isLevelUp = false;
       
-      if (result.leveledUp && result.newRewards.length > 0) {
-        isLevelUp = true;
-        message += `\n\n🎉 LEVEL UP! 🎉\n`;
-        result.newRewards.forEach(reward => {
-          message += `\n✨ Unlocked: ${reward.title}\n${reward.description}`;
-        });
+      // Track level-ups in the new mystery box system
+      if (result.leveledUp) {
+        totalLevelsGained = result.levelsGained;
+        unopenedBoxes = result.unopenedBoxes;
+        showWinMessageWithBoxes();
+      } else {
+        showMessage(`🎉 You got it! +${WIN_XP} XP`);
       }
-      
-      showMessage(message, isLevelUp);
     } else {
       showMessage(`😢 The word was ${ANSWER}`);
     }
@@ -221,17 +220,51 @@ export async function startWordle(container) {
     });
   }
 
-  function showMessage(text, isLevelUp = false) {
+  function showWinMessageWithBoxes() {
+    const existing = root.querySelector('.wordle-message');
+    if (existing) existing.remove();
+    
+    const msg = document.createElement('div');
+    msg.className = 'wordle-message level-up-message';
+    
+    msg.innerHTML = `
+      <div style="font-size: 1.3rem; margin-bottom: 10px;">🎉 You got it! +${WIN_XP} XP</div>
+      <div style="font-size: 1.4rem; font-weight: 700; margin: 15px 0 10px;">🎉 LEVEL UP! 🎉</div>
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 8px; margin-top: 10px;">
+        <div style="font-size: 1.1rem; margin-bottom: 8px;">
+          You gained ${totalLevelsGained} ${totalLevelsGained === 1 ? 'level' : 'levels'}!
+        </div>
+        <div style="margin-bottom: 12px;">
+          ${unopenedBoxes} mystery ${unopenedBoxes === 1 ? 'box' : 'boxes'} waiting for you!
+        </div>
+        <button class="open-boxes-btn" onclick="window.showMysteryBox()" style="
+          padding: 12px 24px;
+          background: white;
+          color: #5f8f7a;
+          border: none;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          width: 100%;
+          margin-top: 5px;
+        ">
+          Open Mystery ${unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
+        </button>
+      </div>
+    `;
+    
+    root.appendChild(msg);
+  }
+
+  function showMessage(text) {
     const existing = root.querySelector('.wordle-message');
     if (existing) existing.remove();
     
     const msg = document.createElement('div');
     msg.className = 'wordle-message';
-    
-    if (isLevelUp) {
-      msg.classList.add('level-up-message');
-    }
-    
     msg.textContent = text;
     root.appendChild(msg);
   }

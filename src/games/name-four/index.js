@@ -50,13 +50,17 @@ export function startNameFour(container) {
   let guessCount = saved?.date === today ? saved.guessCount || 0 : 0;
   let xpAwarded = saved?.date === today ? saved.xpAwarded || 0 : 0;
   let completed = saved?.date === today && saved.completed;
-  let levelUpRewards = []; // Track level-ups during game
+
+  let totalLevelsGained = 0;
+  let unopenedBoxes = 0;
 
   container.innerHTML = `
     <div class="name-four">
+      <!-- DESKTOP BACK BUTTON -->
       <button class="back-btn" id="back-home">← Back</button>
 
       <h2>Name Four</h2>
+
       <div class="category">
         Category: <strong>${puzzle.category}</strong>
       </div>
@@ -79,6 +83,7 @@ export function startNameFour(container) {
       <div id="completion-message"></div>
     </div>
 
+    <!-- MOBILE BACK BAR -->
     <div class="mobile-back-bar">
       <button class="mobile-back-btn" id="mobile-back-home">← Back</button>
     </div>
@@ -88,11 +93,11 @@ export function startNameFour(container) {
   const grid = document.getElementById('answer-grid');
   const completionMessage = document.getElementById('completion-message');
 
+  // ✅ BACK BUTTON HANDLERS (RESTORED)
   document.getElementById('back-home').onclick = () => window.showHome();
   document.getElementById('mobile-back-home').onclick = () => window.showHome();
 
   renderGrid();
-
   if (completed) showCompletionMessage();
 
   /* =========================
@@ -116,13 +121,13 @@ export function startNameFour(container) {
 
     if (answers.includes(guess)) {
       found.add(guess);
+
       const result = awardXP();
-      
-      // Store level-up rewards
-      if (result.leveledUp && result.newRewards.length > 0) {
-        levelUpRewards.push(...result.newRewards);
+      if (result.leveledUp) {
+        totalLevelsGained += result.levelsGained;
+        unopenedBoxes = result.unopenedBoxes;
       }
-      
+
       renderGrid();
 
       if (found.size + revealed.size === 4) {
@@ -181,8 +186,7 @@ export function startNameFour(container) {
   ========================= */
   function awardXP() {
     xpAwarded += XP_PER_ANSWER;
-    const result = progression.addXP(XP_PER_ANSWER);
-    return result;
+    return progression.addXP(XP_PER_ANSWER);
   }
 
   function persist(done = false) {
@@ -215,26 +219,26 @@ export function startNameFour(container) {
         <p>Total guesses: <strong>${guessCount}</strong></p>
     `;
 
-    // Show level-up rewards if any
-    if (levelUpRewards.length > 0) {
+    if (totalLevelsGained > 0) {
       content += `
         <div class="level-up-section">
           <div class="level-up-title">🎉 LEVEL UP! 🎉</div>
-          ${levelUpRewards.map(reward => `
-            <div class="level-up-reward">
-              <strong>${reward.title}</strong>
-              <div class="level-up-desc">${reward.description}</div>
+          <div class="level-up-reward">
+            <strong>
+              You gained ${totalLevelsGained} ${totalLevelsGained === 1 ? 'level' : 'levels'}!
+            </strong>
+            <div class="level-up-desc">
+              ${unopenedBoxes} mystery ${unopenedBoxes === 1 ? 'box' : 'boxes'} waiting
             </div>
-          `).join('')}
+            <button class="open-boxes-btn" onclick="window.showMysteryBox()">
+              Open Mystery ${unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
+            </button>
+          </div>
         </div>
       `;
     }
 
-    content += `
-        <p>Come back tomorrow for a new category</p>
-      </div>
-    `;
-
+    content += `<p>Come back tomorrow for a new category</p></div>`;
     completionMessage.innerHTML = content;
   }
 }

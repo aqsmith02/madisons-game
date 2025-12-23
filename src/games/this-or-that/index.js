@@ -26,7 +26,8 @@ export class ThisOrThatGame {
     this.score = 0;
     this.answers = [];
     this.isComplete = false;
-    this.levelUpRewards = []; // Track level-ups during game
+    this.totalLevelsGained = 0; // Track total levels gained during game
+    this.unopenedBoxes = 0; // Track mystery boxes
     
     this.loadProgress();
     this.render();
@@ -76,9 +77,10 @@ export class ThisOrThatGame {
       // Award XP immediately after each correct answer and check for level-up
       const result = progression.addXP(20);
       
-      // Store level-up rewards
-      if (result.leveledUp && result.newRewards.length > 0) {
-        this.levelUpRewards.push(...result.newRewards);
+      // Track level-ups in the new mystery box system
+      if (result.leveledUp) {
+        this.totalLevelsGained += result.levelsGained;
+        this.unopenedBoxes = result.unopenedBoxes;
       }
     }
 
@@ -146,17 +148,18 @@ export class ThisOrThatGame {
         </div>
     `;
 
-    // Show level-up rewards if any
-    if (this.levelUpRewards.length > 0) {
+    // Show mystery box notification if leveled up
+    if (this.totalLevelsGained > 0) {
       content += `
         <div class="level-up">
           <div class="level-up-banner">🎉 LEVEL UP! 🎉</div>
-          ${this.levelUpRewards.map(reward => `
-            <div class="new-reward">
-              <strong>${reward.title}</strong>
-              <div>${reward.description}</div>
-            </div>
-          `).join('')}
+          <div class="new-reward">
+            <strong>You gained ${this.totalLevelsGained} ${this.totalLevelsGained === 1 ? 'level' : 'levels'}!</strong>
+            <div>${this.unopenedBoxes} mystery ${this.unopenedBoxes === 1 ? 'box' : 'boxes'} waiting for you!</div>
+            <button class="open-boxes-btn" onclick="window.showMysteryBox()">
+              Open Mystery ${this.unopenedBoxes === 1 ? 'Box' : 'Boxes'} 🎁
+            </button>
+          </div>
         </div>
       `;
     }
@@ -182,6 +185,7 @@ export class ThisOrThatGame {
   showReview() {
     const content = `
       <div class="review-screen">
+        <button class="back-btn">← Back</button>
         <h2>Answer Review</h2>
         <div class="review-list">
           ${this.answers.map((a, i) => `
@@ -198,17 +202,20 @@ export class ThisOrThatGame {
             </div>
           `).join('')}
         </div>
-        <button class="home-btn">Back to Home</button>
+      </div>
+
+      <div class="mobile-back-bar">
+        <button class="mobile-back-btn">← Back</button>
       </div>
     `;
 
-    this.container.querySelector('.game-content').innerHTML = content;
+    this.container.innerHTML = content;
     
-    // Add event listener for home button
-    const homeBtn = this.container.querySelector('.home-btn');
-    if (homeBtn) {
-      homeBtn.addEventListener('click', () => window.showHome());
-    }
+    // Add event listeners for back buttons
+    const backBtns = this.container.querySelectorAll('.back-btn, .mobile-back-btn');
+    backBtns.forEach(btn => {
+      btn.addEventListener('click', () => window.showHome());
+    });
   }
 
   render() {
