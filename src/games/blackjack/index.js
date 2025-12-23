@@ -51,6 +51,10 @@ function calculateHandValue(hand) {
   return value;
 }
 
+function isBlackjack(hand) {
+  return hand.length === 2 && calculateHandValue(hand) === 21;
+}
+
 export function startBlackjack(container) {
   const today = new Date().toDateString();
   let saved = loadBlackjackProgress();
@@ -63,6 +67,7 @@ export function startBlackjack(container) {
     gameOver: false,
     result: null,
     playerStanding: false,
+    playerBlackjack: false,
     date: today
   };
 
@@ -89,7 +94,6 @@ export function startBlackjack(container) {
         ${!inProgress ? `
           <div class="betting-screen">
             <h3>Place Your Bet</h3>
-            <p class="bet-description">Bet XP to play. Win double your bet!</p>
             
             ${!canBet ? `
               <div class="insufficient-xp">
@@ -174,9 +178,9 @@ export function startBlackjack(container) {
             ` : `
               <div class="game-result ${gameState.result}">
                 ${gameState.result === 'win' ? `
-                  <div class="result-icon">🎉</div>
-                  <h3>You Win!</h3>
-                  <p>You won ${gameState.bet} XP!</p>
+                  <div class="result-icon">${gameState.playerBlackjack ? '🎰' : '🎉'}</div>
+                  <h3>${gameState.playerBlackjack ? 'BLACKJACK!' : 'You Win!'}</h3>
+                  <p>You won ${Math.floor(gameState.bet * (gameState.playerBlackjack ? 1.5 : 1))} XP!${gameState.playerBlackjack ? ' (1.5x Blackjack Bonus!)' : ''}</p>
                 ` : gameState.result === 'lose' ? `
                   <div class="result-icon">😔</div>
                   <h3>You Lose</h3>
@@ -214,8 +218,8 @@ export function startBlackjack(container) {
       return;
     }
 
-    // Deduct bet from XP
-    progression.addXP(-betAmount);
+    // Deduct bet directly without triggering level-up logic
+    progression.subtractXP(betAmount);
 
     gameState = {
       deck: createDeck(),
@@ -225,6 +229,7 @@ export function startBlackjack(container) {
       gameOver: false,
       result: null,
       playerStanding: false,
+      playerBlackjack: false,
       date: today
     };
 
@@ -235,8 +240,15 @@ export function startBlackjack(container) {
     gameState.dealerHand.push(gameState.deck.pop());
 
     // Check for blackjack
-    if (calculateHandValue(gameState.playerHand) === 21) {
-      endGame('win');
+    if (isBlackjack(gameState.playerHand)) {
+      gameState.playerBlackjack = true;
+      
+      // Check if dealer also has blackjack (push)
+      if (isBlackjack(gameState.dealerHand)) {
+        endGame('push');
+      } else {
+        endGame('win');
+      }
       return;
     }
 
@@ -287,10 +299,18 @@ export function startBlackjack(container) {
     gameState.result = result;
 
     if (result === 'win') {
-      progression.addXP(gameState.bet * 2);
+      // Blackjack pays 2.5x total (including stake)
+      // Regular win pays 2x total (including stake)
+      const payout = gameState.playerBlackjack 
+        ? Math.floor(gameState.bet * 2.5)  // 2.5x total for blackjack
+        : gameState.bet * 2;                // 2x total for regular win
+      
+      progression.addXP(payout);
     } else if (result === 'push') {
-      progression.addXP(gameState.bet);
+      // Return the bet without triggering level-up logic
+      progression.subtractXP(-gameState.bet);
     }
+    // If lose, XP was already deducted so do nothing
 
     saveBlackjackProgress(gameState);
     render();
@@ -305,6 +325,7 @@ export function startBlackjack(container) {
       gameOver: false,
       result: null,
       playerStanding: false,
+      playerBlackjack: false,
       date: today
     };
     saveBlackjackProgress(gameState);

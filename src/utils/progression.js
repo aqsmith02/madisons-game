@@ -97,12 +97,16 @@ export class ProgressionSystem {
       
       // Mystery boxes waiting to be opened
       this.unopenedBoxes = data.unopenedBoxes || 0;
+      
+      // Track highest level ever achieved to prevent re-earning boxes
+      this.highestLevelAchieved = data.highestLevelAchieved || 0;
     } else {
       // First time user - give them a welcome mystery box!
       this.totalXP = 0;
       this.lastPlayed = {};
       this.stickerCollection = {};
       this.unopenedBoxes = 1;
+      this.highestLevelAchieved = 0;
       this.save(); // Save immediately so they get the box
     }
   }
@@ -112,7 +116,8 @@ export class ProgressionSystem {
       totalXP: this.totalXP,
       lastPlayed: this.lastPlayed,
       stickerCollection: this.stickerCollection,
-      unopenedBoxes: this.unopenedBoxes
+      unopenedBoxes: this.unopenedBoxes,
+      highestLevelAchieved: this.highestLevelAchieved
     }));
   }
 
@@ -121,9 +126,11 @@ export class ProgressionSystem {
     this.totalXP += amount;
     const newLevel = this.getCurrentLevel();
     
-    // Award mystery boxes for each level gained
-    const levelsGained = newLevel - oldLevel;
-    if (levelsGained > 0) {
+    // Only award boxes for NEW levels never achieved before
+    const levelsGained = Math.max(0, newLevel - Math.max(oldLevel, this.highestLevelAchieved));
+    
+    if (newLevel > this.highestLevelAchieved) {
+      this.highestLevelAchieved = newLevel;
       this.unopenedBoxes += levelsGained;
     }
     
@@ -134,6 +141,13 @@ export class ProgressionSystem {
       levelsGained,
       unopenedBoxes: this.unopenedBoxes 
     };
+  }
+
+  // Subtract XP without triggering level-up checks (for blackjack bets)
+  subtractXP(amount) {
+    this.totalXP -= amount;
+    if (this.totalXP < 0) this.totalXP = 0;
+    this.save();
   }
 
   getCurrentLevel() {
