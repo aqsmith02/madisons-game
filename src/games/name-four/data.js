@@ -73,39 +73,12 @@ export const NAME_FOUR_PUZZLES = [
     ]
   },
   {
-    category: 'Best Xbox Games I\'ve Played',
-    answers: [
-      'Doom Eternal',
-      'Overwatch',
-      'South Park: The Fractured But Whole',
-      'Call of Duty: Black Ops 2'
-    ]
-  },
-  {
     category: 'Things I\'d Buy If I Won The Lottery',
     answers: [
       'Suit',
       'Ear Rings',
       'Radiohead Tickets',
       'Porsche'
-    ]
-  },
-  {
-    category: 'Male Dog Names I Like',
-    answers: [
-      'James',
-      'Winston',
-      'Peter',
-      'Ryan'
-    ]
-  },
-  {
-    category: 'Favorite Historical Civilizations',
-    answers: [
-      'Greeks',
-      'Egyptians',
-      'Mongols',
-      'Anglo-Saxons'
     ]
   },
   {
@@ -181,16 +154,7 @@ export const NAME_FOUR_PUZZLES = [
     ]
   },
   {
-    category: 'Best Roller Coasters I\'ve Been On',
-    answers: [
-      'Fury 325',
-      'Mako',
-      'The Hulk',
-      'Dueling Dragons'
-    ]
-  },
-  {
-    category: 'Childhood Games I Enjoyed',
+    category: 'Childhood Videogames I Enjoyed',
     answers: [
       'Webkinz',
       'Mariokart',
@@ -217,15 +181,6 @@ export const NAME_FOUR_PUZZLES = [
     ]
   },
   {
-    category: 'Video Games I Wish I Liked More',
-    answers: [
-      'The Witcher 3',
-      'Mortal Kombat',
-      'Cuphead',
-      'Grand Theft Auto V'
-    ]
-  },
-  {
     category: 'Superheroes I\'d Like To Be',
     answers: [
       'Batman',
@@ -237,19 +192,10 @@ export const NAME_FOUR_PUZZLES = [
   {
     category: 'Cereal Mascots I Could Beat In A Fight',
     answers: [
-      'Lucky',
-      'Buzz',
+      'Lucky The Leprechaun',
+      'Buzz Bee',
       'Toucan Sam',
       'Trix Rabbit'
-    ]
-  },
-  {
-    category: 'Favorite Poker Slang',
-    answers: [
-      'Muck',
-      'Bullets',
-      'Wheel',
-      'Donk'
     ]
   },
   {
