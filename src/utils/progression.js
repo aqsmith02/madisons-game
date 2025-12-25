@@ -32,7 +32,7 @@ const STICKERS = [
   // Rare (15% chance) - 3 stickers
   { id: 16, name: 'Pirate Andrew', rarity: 'rare', image: 'stickers/pirate.png' },
   { id: 17, name: 'Successful Andrew', rarity: 'rare', image: 'stickers/successful.png' },
-  { id: 18, name: 'Spinosaurus Andrew', rarity: 'rare', image: 'stickers/spinosaurus.png' },
+  { id: 18, name: 'Spinosaurus Andrew', rarity: 'rare', image: 'stickers/dinosaur.png' },
   
   // Legendary (5% chance) - 2 stickers
   { id: 19, name: 'Poochaco Andrew', rarity: 'legendary', image: 'stickers/poochaco.png' },

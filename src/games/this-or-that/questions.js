@@ -2,8 +2,7 @@
 
 export const QUESTIONS = [
   { id: 1, optionA: "Methodical Coffee", optionB: "Rowan Coffee", answer: "B" },
-  { id: 2, optionA: "Clash Royale", optionB: "Overwatch", answer: "B" },
-  { id: 3, optionA: "Pocket 8s", optionB: "Ace 9 Suited", answer: "B" },
+  { id: 2, optionA: "Clash Royale", optionB: "Overwatch", answer: "A" },
   { id: 4, optionA: "Apple Bold Rock", optionB: "Mimosa Bold Rock", answer: "A" },
   { id: 5, optionA: "Dr Pepper", optionB: "Coke", answer: "B" },
   { id: 6, optionA: "Krusty", optionB: "Ned", answer: "B" },
@@ -19,7 +18,6 @@ export const QUESTIONS = [
   { id: 16, optionA: "100 Spiders", optionB: "20 Squirrels", answer: "A" },
   { id: 17, optionA: "Unlimited Games & Bacon", optionB: "No Games", answer: "A" },
   { id: 18, optionA: "Minecraft Cottage", optionB: "Minecraft Castle", answer: "A" },
-  { id: 19, optionA: "Lead Out Bluff", optionB: "Re-raise Bluff", answer: "B" },
   { id: 20, optionA: "Checkerboard Flooring", optionB: "Carpet", answer: "A" },
   { id: 21, optionA: "Sci-Fi", optionB: "Westerns", answer: "A" },
   { id: 22, optionA: "Sunny", optionB: "Partly Cloudy", answer: "B" },
@@ -34,7 +32,6 @@ export const QUESTIONS = [
   { id: 31, optionA: "Cadbury Egg", optionB: "Chocolate Chip Cookie", answer: "B" },
   { id: 32, optionA: "Fame", optionB: "Money", answer: "B" },
   { id: 33, optionA: "Matcha", optionB: "Iced Americano", answer: "B" },
-  { id: 34, optionA: "Mimi", optionB: "Nana", answer: "B" },
   { id: 35, optionA: "Leather", optionB: "Velvet", answer: "A" },
 
   { id: 36, optionA: "Morning Person", optionB: "Night Owl", answer: "B" },
@@ -57,7 +54,6 @@ export const QUESTIONS = [
   { id: 52, optionA: "Pancakes", optionB: "Waffles", answer: "B" },
   { id: 53, optionA: "Chocolate", optionB: "Vanilla", answer: "A" },
   { id: 54, optionA: "Instagram Reels", optionB: "Youtube Shorts", answer: "B" },
-  { id: 55, optionA: "Group Hang", optionB: "One-on-One", answer: "B" },
   { id: 56, optionA: "Stanley Kubrick", optionB: "Francis Ford Coppola", answer: "B" },
   { id: 57, optionA: "Ryan Gosling", optionB: "Harrison Ford", answer: "A" },
   { id: 58, optionA: "Bowling", optionB: "Mini Golf", answer: "A" },
